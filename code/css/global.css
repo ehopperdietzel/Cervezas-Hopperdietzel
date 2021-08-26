@@ -1,0 +1,89 @@
+/* Fuentes tipográficas */
+@font-face
+{
+  font-family: impact-regular;
+  src: url(../fonts/impact.ttf);
+}
+@font-face
+{
+  font-family: sf-pro-display;
+  src: url(../fonts/SF-Pro-Display-Regular.otf);
+}
+
+/* Variables Gobales */
+:root
+{
+  /* Colores */
+  --gray:#666666;
+  --light-gray:#9A9A9A;
+  --light-blue:#00abf8;
+  --font-size-default:14px;
+  --font-size-element:14px;
+  --font-size-1:10px;
+  --font-size-2:16px;
+  --font-size-3:24px;
+  --font-size-4:28px;
+  --font-size-5:32px;
+  --elements-margin:6px;
+  --elements-padding:7px;
+  --border-roundness:3px;
+}
+
+/* Estilos Globales */
+html,body
+{
+  margin:0;
+  padding:0;
+  color:var(--light-gray);
+  font-family: sf-pro-display;
+  font-size:var(--font-size-default);
+}
+input[type="text"],input[type="password"]
+{
+  border-radius:var(--border-roundness);
+  border:0.5px solid var(--light-gray);
+  margin:var(--elements-margin);
+  padding:var(--elements-padding);
+  font-size:var(--font-size-element);
+}
+button
+{
+  border:none;
+  border-radius:var(--border-roundness);
+  padding:var(--elements-padding);
+  margin:var(--elements-margin);
+  font-size:var(--font-size-element);
+  color:white;
+}
+button.light-blue
+{
+  background:var(--light-blue);
+}
+button.text-only
+{
+  background:none;
+  color:var(--gray);
+}
+
+/* Clases */
+.pointer,button
+{
+  cursor:pointer;
+}
+.pointer:hover,button:hover
+{
+  opacity:0.8;
+}
+.full-width
+{
+  width:100%;
+}
+input.full-width,button.full-width
+{
+  width:calc(100% - var(--elements-margin)/2 - var(--elements-padding)/2);
+}
+
+.text-align-left
+{
+  text-align: left;
+}
