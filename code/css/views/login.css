@@ -21,3 +21,8 @@
 {
   margin:4px;
 }
+#error-label
+{
+  display:none;
+  color:var(--red);
+}

@@ -7,6 +7,10 @@
     <link type="text/css" rel="stylesheet" href="css/global.css">
     <link type="text/css" rel="stylesheet" href="css/views/login.css">
 
+    <!-- Scripts -->
+    <script type="text/javascript" src="js/lib/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="js/views/login/login.js"></script>
+
   </head>
   <body>
     <div id='login-panel'>
@@ -17,8 +21,9 @@
       <div id="session-menu" class="text-align-left">
         <input type="checkbox"/> Mantener sesión?
       </div>
-      <button class="light-blue full-width">Iniciar sesión</button><br>
-      <button class="text-only full-width">Recuperar contraseña</button>
+      <div id="error-label">Error</div>
+      <button id="login-button" class="light-blue full-width">Iniciar sesión</button><br>
+      <button id="password-button"class="text-only full-width">Recuperar contraseña</button>
     </div>
   </body>
 </html>
