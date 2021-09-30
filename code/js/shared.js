@@ -17,17 +17,23 @@ function getDOMElements()
   eLoginPanel           = $("#login-panel");
   eAdminPanel           = $("#admin-panel");
 
+  // Login panel
   eUsernameInput        = $("#username-input");
   ePasswordInput        = $("#password-input");
   eKeepSessionCheckbox  = $("#session-menu input");
   eLoginButton          = $("#login-button");
   eErrorLabel           = $("#error-label");
   eForgotPasswordButton = $("#password-button");
+
+  // Admin panel
+  eUsernameLabel        = $("#left-menu .username");
+  eLogoutButton         = $("#logout-button");
 }
 
 function genDOMEvents()
 {
   eLoginButton.click(login);
+  eLogoutButton.click(logout);
 }
 
 function checkSession()
@@ -49,6 +55,7 @@ function checkSession()
     // Si ha iniciado como usuario root
     if(userID == 0)
     {
+      eUsernameLabel.html("Usuario Root");
       eAdminPanel.fadeIn(256);
     }
   }

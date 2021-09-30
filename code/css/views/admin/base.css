@@ -1,5 +1,6 @@
 #admin-panel
 {
+  position:relative;
   width:100vw;
   height:100vh;
   display:none;
@@ -7,7 +8,94 @@
 
 #left-menu
 {
+  position:relative;
   height:100vh;
   width:220px;
   background:#333333;
+}
+
+#left-menu .top
+{
+  position:relative;
+  border-bottom: 0.5px solid var(--gray);
+  height:60px;
+}
+#left-menu .text-container
+{
+  position:absolute;
+  left: 10px;
+  top: 10px;
+}
+#left-menu .title
+{
+  color:white;
+  font-family: impact-regular;
+  font-size:18px;
+}
+#left-menu .username
+{
+  font-size:12px;
+}
+
+#loading-indicator
+{
+  position:absolute;
+  top:20px;
+  right: 20px;
+  width:20px;
+  height:20px;
+  background-image: url('../../../img/icons/ready.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+#loading-indicator.loading
+{
+  background-image: url('../../../img/icons/loading.png');
+  -webkit-animation:spin 0.8s linear infinite;
+  -moz-animation:spin 0.8s linear infinite;
+  animation:spin 0.8s linear infinite;
+}
+
+@-moz-keyframes spin {
+    100% { -moz-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+    100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform:rotate(360deg);
+    }
+}
+
+#menu-sections
+{
+  position:relative;
+  max-height: calc(100% - 60px);
+  width:100%
+}
+#menu-sections .section
+{
+  position:relative;
+  height:40px;
+  width:100%;
+  position:relative;
+  max-height: calc(100% - 60px);
+  border-bottom: 0.5px solid var(--gray);
+}
+#menu-sections img
+{
+  position:absolute;
+  top:6px;
+  left:6px;
+  height:28px;
+}
+#menu-sections .section-name
+{
+  color:#FFF;
+  position:absolute;
+  left:42px;
+  top:12px;
 }
