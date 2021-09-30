@@ -1,8 +1,5 @@
 <?php
 
-// Sessión
-session_start();
-
 // Zona horaria
 date_default_timezone_set("America/Santiago");
 

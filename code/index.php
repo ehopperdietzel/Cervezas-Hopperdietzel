@@ -1,23 +1,28 @@
-<?php
+<html>
+  <head>
+    <title>Panel de Administrador</title>
+    <meta charset="utf-8">
 
-// Ruteo de sesiones
+    <!-- Estilos -->
+    <link type="text/css" rel="stylesheet" href="css/global.css">
+    <link type="text/css" rel="stylesheet" href="css/views/login.css">
+    <link type="text/css" rel="stylesheet" href="css/views/admin/base.css">
 
-session_start();
+    <!-- Scripts -->
+    <script type="text/javascript" src="js/lib/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="js/views/login.js"></script>
+    <script type="text/javascript" src="js/views/admin/base.js"></script>
+    <script type="text/javascript" src="js/shared.js"></script>
 
-// Verifica sesión
-if(isset($_SESSION['userID']))
-{
-  // Usuario root
-  if($_SESSION['userID'] == 0)
-    include "php/views/admin/base.php";
+  </head>
+  <body>
 
-  // Usuario admin
-  else
-    include "php/views/admin.php";
-}
-// No ha iniciado sesión ( panel de login )
-else
-{
-  include "php/views/login/base.php";
-}
-?>
+    <!-- Login Panel -->
+    <?php include "php/views/login-panel.php";?>
+
+    <!-- Admin Panel -->
+    <?php include "php/views/admin/base.php";?>
+
+
+  </body>
+</html>

@@ -1,8 +1,7 @@
 <?php
 
 include_once("../../../shared/validate.php");
-
-session_start();
+include_once("../../../shared/jwt.php");
 
 requiredParameters(array("username","password"));
 
@@ -13,8 +12,8 @@ $root = json_decode(file_get_contents(realpath(dirname(__FILE__)."/../../../../c
 
 if($root->username == $username && $root->password == $password)
 {
-  $_SESSION["userID"] = 0;
-  httpSuccess("Inicio de sesión como usuario root.");
+  // Sesión usuario root
+  httpSuccess(genToken(0));
 }
 else
 {
