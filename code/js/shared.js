@@ -14,49 +14,47 @@ $(document).ready(function()
 
 function getDOMElements()
 {
-  eLoginPanel           = $("#login-panel");
-  eAdminPanel           = $("#admin-panel");
+  // Paneles
+  eLoginPanel                 = $("#login-panel");
+  eAdminPanel                 = $("#admin-panel");
 
-  // Login panel
-  eUsernameInput        = $("#username-input");
-  ePasswordInput        = $("#password-input");
-  eKeepSessionCheckbox  = $("#session-menu input");
-  eLoginButton          = $("#login-button");
-  eErrorLabel           = $("#error-label");
-  eForgotPasswordButton = $("#password-button");
+  // Elementos del login panel
+  eUsernameInput              = $("#username-input");
+  ePasswordInput              = $("#password-input");
+  eKeepSessionCheckbox        = $("#session-menu input");
+  eLoginButton                = $("#login-button");
+  eErrorLabel                 = $("#error-label");
+  eForgotPasswordButton       = $("#password-button");
 
-  // Admin panel
-  eUsernameLabel        = $("#left-menu .username");
-  eLogoutButton         = $("#logout-button");
+  // Elementos del admin panel
+  eAllSectionButtons          = $("#menu-sections .section-button");
+  eUsersSectionButton         = $("#users-section-button");
+  eUsernameLabel              = $("#left-menu .username");
+  eLogoutButton               = $("#logout-button");
+
+  // Sección Usuarios
+  eAddUserButton              = $("#add-user-button");
+  eUserModal                  = $("#users-modal");
+  eUserModalNameInput         = $("#user-name-input");
+  eUserModalLastnameInput     = $("#user-lastname-input");
+  eUserModalUsernameInput     = $("#user-username-input");
+  eUserModalEmailInput        = $("#user-email-input");
+  eUserModalStatusSelect      = $("#user-status-select");
+  eUserModalCancelButton      = $("#user-status-select");
+  eUserModalCancelButton      = $("#user-status-select");
+
+  // Modales
+  eModalBackground            = $("#modal-background");
+
 }
 
 function genDOMEvents()
 {
+  eModalBackground.click(clickedOutsideModal);
   eLoginButton.click(login);
   eLogoutButton.click(logout);
-}
+  eUsersSectionButton.click(loadUsersSection);
 
-function checkSession()
-{
-  token = localStorage.getItem("token");
-
-  // Si no ha iniciado sesión
-  if(token === null)
-  {
-    eAdminPanel.hide();
-    eLoginPanel.fadeIn(256);
-  }
-  else
-  {
-    userID = parseInt(JSON.parse(atob(token.split(".")[1]))["usr"]);
-
-    eLoginPanel.hide();
-
-    // Si ha iniciado como usuario root
-    if(userID == 0)
-    {
-      eUsernameLabel.html("Usuario Root");
-      eAdminPanel.fadeIn(256);
-    }
-  }
+  // Sección usuarios
+  eAddUserButton.click(addUser);
 }

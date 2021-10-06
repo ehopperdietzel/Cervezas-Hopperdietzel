@@ -15,6 +15,7 @@
 {
   /* Colores */
   --gray:#666666;
+  --dark-gray:#444444;
   --light-gray:#9A9A9A;
   --light-blue:#00abf8;
   --red:#FF1D25;
@@ -61,14 +62,27 @@ button.light-blue
 {
   background:var(--light-blue);
 }
+button.gray
+{
+  background:var(--gray);
+}
 button.text-only
 {
   background:none;
   color:var(--gray);
 }
+.button.plus
+{
+  height:36px;
+  width:36px;
+  background-image: url('../img/icons/plus.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
 
 /* Clases */
-.pointer,button
+.pointer,button,.button
 {
   cursor:pointer;
   -webkit-user-select: none; /* Safari */
@@ -76,9 +90,13 @@ button.text-only
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
 }
-.pointer:hover,button:hover
+.pointer:hover,button:hover,.button:hover
 {
   opacity:0.8;
+}
+.pointer:active,button:active,.button:active
+{
+  opacity:0.6;
 }
 .full-width
 {
@@ -88,8 +106,111 @@ input.full-width,button.full-width
 {
   width:calc(100% - var(--elements-margin)/2 - var(--elements-padding)/2);
 }
-
 .text-align-left
 {
   text-align: left;
+}
+.search-input
+{
+  position:relative;
+}
+.search-input img
+{
+  position:absolute;
+  height:16px;
+  top:calc(50% - 8px);
+  left:12px;
+}
+.search-input input
+{
+  padding-left: 28px;
+  border:solid 0.5px var(--light-gray);
+  border-radius: 5px;
+}
+#modal-background
+{
+  display: none;
+  background: rgba(0,0,0,0.5);
+  width:100vw;
+  height:100vh;
+  position:absolute;
+  z-index:20;
+  justify-content: center;
+  align-items: center;
+}
+#modal-background .modal
+{
+  padding:18px;
+  background: white;
+  border-radius: 6px;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+}
+#modal-background .modal .title
+{
+  font-size: 24px;
+  font-weight: bold;
+  color:var(--dark-gray);
+  margin:10px;
+}
+.select select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 !important;
+  background: #EEE;
+  font-size: 12px;
+  background-image: none;
+}
+/* Remove IE arrow */
+.select select::-ms-expand {
+  display: none;
+}
+/* Custom Select */
+.select {
+  width:calc(100% - 13px);
+  position: relative;
+  display: flex;
+  height: 30px;
+  line-height: 30px;
+  background: #EEE;
+  overflow: hidden;
+  border:solid 0.5px var(--light-gray);
+  border-radius: 5px;
+  margin:10px;
+}
+.select select {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  flex: 1;
+  padding: 0 10px;
+  padding-right: 35px;
+  color: #666;
+  cursor: pointer;
+}
+/* Arrow */
+.select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0;
+  width:30px;
+  background: #DDD;
+  text-align: center;
+  cursor: pointer;
+  font-size: 12px;
+  pointer-events: none;
+  -webkit-transition: .25s all ease;
+  -o-transition: .25s all ease;
+  transition: .25s all ease;
+}
+/* Transition */
+.select:hover::after {
+  color: #3FA9F5;
 }
