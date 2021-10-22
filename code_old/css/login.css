@@ -1,0 +1,24 @@
+#login-panel
+{
+  width:220px;
+  margin-left: calc(50vw - 110px);
+  text-align: center;
+  margin-top: 20vh;
+  display:none;
+}
+#login-title
+{
+  font-family: impact-regular;
+  font-size: 34px;
+  color:var(--gray);
+}
+#login-subtitle
+{
+  font-size: 16px;
+  color:var(--light-gray);
+  margin:4px;
+}
+#login-session-menu
+{
+  margin:4px;
+}

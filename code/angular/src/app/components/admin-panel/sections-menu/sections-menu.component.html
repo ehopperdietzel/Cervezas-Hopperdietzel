@@ -1,0 +1,19 @@
+<div id="left-menu">
+  
+    <div class="top">
+      <div class="text-container">
+        <div class="title">HOPPERDIETZEL</div>
+        <div class="username">{{currentUser}}</div>
+      </div>
+      <div id="loading-indicator" [ngClass]="(loading)?'loading':''"></div>
+    </div>
+
+    <div id="menu-sections" *ngFor="let section of sections">
+        <div id="users-section-button" class="section-button pointer" (click)="sectionChanged.emit(section.name)">
+            <img src="{{section.icon}}">
+            <div class="section-name">{{section.name}}</div>
+            <div *ngIf="section.name == currentSection"class="select-indicator"></div>
+        </div>
+    </div>
+
+  </div>
