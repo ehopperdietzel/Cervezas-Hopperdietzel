@@ -1,0 +1,21 @@
+#alert-modal
+{
+    margin-bottom: 10vh;
+}
+.buttons-container
+{
+    width:100%;
+    display: flex;
+    justify-content:space-between;
+}
+.body
+{
+    padding:15px 5px 15px 5px;
+    border-top:solid 0.5px var(--light-gray);
+    border-bottom:solid 0.5px var(--light-gray);
+    margin-bottom: 10px;
+}
+button{
+    width:100%;
+    margin-bottom: 0px;
+}

@@ -1,0 +1,14 @@
+<table id="user-table" class="table" cellspacing="0" cellpadding="0">
+    <thead align="left">
+        <th *ngFor="let column of columns">{{column[0]}}</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of rows" (contextmenu)="onRightClick($event,row)">
+            <td *ngFor="let column of columns">
+                <b *ngIf="column[1] == 'status' && row[column[1]] == 0" class="text red">Desactivado</b>
+                <b *ngIf="column[1] == 'status' && row[column[1]] == 1" class="text green">Activado</b>
+                <span *ngIf="column[1] != 'status'">{{row[column[1]]}}</span>
+            </td>
+        </tr>
+    </tbody>
+</table>

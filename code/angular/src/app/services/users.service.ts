@@ -1,23 +1,55 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User } from '../interfaces/user'
 import { environment } from 'src/environments/environment';
+import { SessionService } from './session.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
 
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient,private session : SessionService ) { }
 
-  getUsers() : Observable<User[]>
+  public getUsers(query : string) : Observable<any>
   {
-    return this.http.get<User[]>("/users")
+
+    let options = 
+    {
+      headers:{Authorization: 'Bearer ' + this.session.getToken()},
+      params:Object()
+    };
+
+    if(query.length != 0)
+        options.params.query = query;
+        
+    return this.http.get<any>(environment.apiURL+"/users",options);
   }
 
-  login(email:string,password:string)
+  public createUser(userData : any) : Observable<any>
   {
-    return this.http.post<any>(environment.apiURL + '/login',{email:email,password:password});
+    var options = 
+    {
+      headers:{Authorization: 'Bearer ' + this.session.getToken()}
+    };
+    return this.http.post<any>(environment.apiURL + '/users', userData, options);
+  }
+
+  public updateUser(userData : any) : Observable<any>
+  {
+    var options = 
+    {
+      headers:{Authorization: 'Bearer ' + this.session.getToken()}
+    };
+    return this.http.patch<any>(environment.apiURL + '/users', userData, options);
+  }
+
+  public deleteUser(userId : number) : Observable<any>
+  {
+    var options = 
+    {
+      headers:{Authorization: 'Bearer ' + this.session.getToken()}
+    };
+    return this.http.delete<any>(environment.apiURL + '/users/'+userId.toString(), options);
   }
 }

@@ -1,0 +1,38 @@
+#contextMenu
+{
+    position:absolute;
+    border-radius: 6px;
+    z-index:10;
+    background: white;
+    border:solid 0.5px var(--light-gray);
+    min-width:200px;
+    max-width: 300px;
+    overflow: hidden;
+}
+
+#contextMenu .item
+{
+    display: flex;
+    background: #FFF;
+    padding:10px 6px 10px 6px;
+    cursor: pointer;
+    align-items: center;
+    vertical-align: middle;
+}
+
+#contextMenu .item:hover
+{
+    background:var(--light-blue);
+    color:#FFF;
+}
+
+#contextMenu .item .icon
+{
+    width:10px;
+    height:10px;
+    margin-top: 3px;
+    margin-right: 7px;
+    margin-left: 5px;
+    background-position: center;
+    background-size: contain;
+}

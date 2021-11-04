@@ -1,0 +1,22 @@
+<div id="modals" *ngIf="active" (mousedown)="close()">
+    <div (mousedown)="$event.stopPropagation();" id="users-modal" class="modal">
+        <div class="title">{{title}}</div>
+        <input id="user-name-input" type="text" placeholder="Nombre" [(ngModel)]='formData.firstname'/>
+        <input id="user-lastname-input" type="text" placeholder="Apellido" [(ngModel)]='formData.lastname'/>
+        <input id="user-email-input" type="text" placeholder="Email" [(ngModel)]='formData.email'/>
+        <input id="user-password-input" type="text" placeholder="Contraseña" [(ngModel)]='formData.password'/>
+        <div class="select">
+        <select id="user-status-select" [(ngModel)]='formData.status'>
+            <option value=1>Habilitado</option>
+            <option value=0>Deshabilitado</option>
+        </select>
+        </div>
+        <div *ngIf="errorMessage!=''" id="user-error-label" class="error-label">{{errorMessage}}</div>
+        <div class="buttons-container">
+        <button *ngIf="title=='Nuevo Usuario'" (click)="createUser()" id="user-create-button" class="light-green">Añadir</button>
+        <button *ngIf="title=='Modificar Usuario'" [disabled]="!formDataChanged()" (click)='updateUser()' id="user-save-button" class="light-blue">Guardar</button>
+        <button id="user-cancel-button" class="gray" (click)="close()">Cancelar</button>
+        </div>
+    </div>
+</div>
+  

@@ -1,0 +1,12 @@
+<div id="admin-panel">
+
+    <sections-menu (sectionChanged)="selectSection($event)" [sections]="sections" [currentSection]="currentSection" [username]="session.getUsername()"></sections-menu>
+  
+    <div id="right-menu">
+      <users-section></users-section>
+      
+    </div>
+  
+    
+  
+  </div>

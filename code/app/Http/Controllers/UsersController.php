@@ -6,19 +6,27 @@ use Illuminate\Http\Request;
 use App\Http\Middleware\JWT;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\GetUsersRequest;
 use App\Http\Requests\CreateUserRequest;
-
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\DeleteUserRequest;
+use App\Models\Users;
 
 class UsersController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt', ['except' => ['login','test']]);
+        $this->middleware('jwt', ['except' => ['login']]);
     }
 
-    public function create(CreateUserRequest $request)
+    public function createUser(CreateUserRequest $request)
     {
-        return "1";
+        if($request->jwtUserId == 0)
+        {
+            $id = Users::createNewUser($request);
+            return response()->json(['userId' => $id], 200);
+        }
+        abort(401, 'Unauthorized user.');
     }
 
     public function login(LoginRequest $request)
@@ -36,13 +44,35 @@ class UsersController extends Controller
             abort(401, 'Invalid credentials.');
         }
 
-
         return $hostname;
     }
 
-    public function test()
+    public function getUsers(GetUsersRequest $request)
     {
-        return "hola";
+        if($request->jwtUserId == 0)
+        {
+            return json_encode(Users::getUsersWithPassword($request));
+        }
+        abort(401, 'Unauthorized user.');
     }
 
+    public function updateUser(UpdateUserRequest $request)
+    {
+        if($request->jwtUserId == 0)
+        {
+            Users::updateUser($request);
+            return response()->json(['status' => "success"],200);
+        }
+        abort(401, 'Unauthorized user.');
+    }
+
+    public function deleteUser(DeleteUserRequest $request)
+    {
+        if($request->jwtUserId == 0)
+        {
+            Users::deleteUser($request);
+            return response()->json(['status' => "success"],200);
+        }
+        abort(401, 'Unauthorized user.');
+    }
 }

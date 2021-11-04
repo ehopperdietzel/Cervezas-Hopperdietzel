@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { environment, decode } from 'src/environments/environment';
+import { SessionService } from './services/session.service';
 
 
 @Component({
@@ -9,29 +9,10 @@ import { environment, decode } from 'src/environments/environment';
 })
 export class AppComponent 
 {
-  currentPanel = 'loginPanel';
+  public session : SessionService;
   
-  constructor()
+  constructor(private sessionService : SessionService)
   {
-    this.checkSession();
+    this.session = sessionService;
   }
-
-  checkSession()
-  {
-    var token = localStorage.getItem("token");
-
-    if(token !== null)
-    {
-      environment.user.token = token;
-      environment.user.id = parseInt(JSON.parse(decode(token.split(".")[1]))["usr"]);
-      environment.user.name = JSON.parse(decode(token.split(".")[1]))["name"];
-      this.currentPanel = 'adminPanel';
-    }
-    else
-    {
-      this.currentPanel = 'loginPanel';
-    }
-
-  }
-
 }

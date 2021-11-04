@@ -3,9 +3,9 @@
     <div class="top">
       <div class="text-container">
         <div class="title">HOPPERDIETZEL</div>
-        <div class="username">{{currentUser}}</div>
+        <div class="username">{{username}}</div>
       </div>
-      <div id="loading-indicator" [ngClass]="(loading)?'loading':''"></div>
+      <div id="loading-indicator" [ngClass]="(loadingIndicatorService.anyLoading())?'loading':''"></div>
     </div>
 
     <div id="menu-sections" *ngFor="let section of sections">

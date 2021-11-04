@@ -76,7 +76,19 @@ button.text-only
   background-repeat: no-repeat;
   background-size: contain;
 }
-
+button.warning
+{
+  background:var(--red);
+  color: #FFF;
+}
+.text.red
+{
+  color:var(--red);
+}
+.text.green
+{
+  color:var(--light-green);
+}
 /* Clases */
 .pointer,button,.button
 {
@@ -93,6 +105,11 @@ button.text-only
 .pointer:active,button:active,.button:active
 {
   opacity:0.6;
+}
+button:disabled,
+button[disabled]{
+  opacity:0.5;
+  cursor:not-allowed;
 }
 .full-width
 {
@@ -133,9 +150,9 @@ button.full-width
   border:solid 0.5px var(--light-gray);
   border-radius: 5px;
 }
-#modal-background
+#modals
 {
-  display: none;
+  display: flex;
   background: rgba(0,0,0,0.5);
   width:100vw;
   height:100vh;
@@ -144,7 +161,7 @@ button.full-width
   justify-content: center;
   align-items: center;
 }
-#modal-background .modal
+#modals .modal
 {
   padding:18px;
   background: white;
@@ -153,7 +170,7 @@ button.full-width
   flex-direction:column;
   align-items: center;
 }
-#modal-background .modal .title
+#modals .modal .title
 {
   font-size: 24px;
   font-weight: bold;
@@ -219,4 +236,27 @@ button.full-width
 /* Transition */
 .select:hover::after {
   color: #3FA9F5;
+}
+
+.section
+{
+  width:100%;
+  height:100%;
+}
+.section .top-bar
+{
+  display:flex;
+  z-index:10;
+  width:100%;
+  height:60px;
+  background:white;
+  box-shadow: 0px 0px 3px 0px var(--light-gray);
+  align-items:center;
+}
+.section .bottom-menu
+{
+  z-index:1;
+  width:100%;
+  height:calc(100% - 60px);
+  position:relative;
 }

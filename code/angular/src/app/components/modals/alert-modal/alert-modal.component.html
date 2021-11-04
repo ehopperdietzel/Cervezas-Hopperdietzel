@@ -1,0 +1,14 @@
+<div id="modals" *ngIf="modalService.alertData.visible" (mousedown)="modalService.alertData.visible=false">
+    <div (mousedown)="$event.stopPropagation();" id="alert-modal" class="modal">
+        <div class="title">{{modalService.alertData.title}}</div>
+        <div class="body" [innerHTML]="modalService.alertData.body"></div>
+        <div class="buttons-container">
+            <button 
+            *ngFor="let button of modalService.alertData.buttons" 
+            (click)="modalService.alertData.requester[button.clickFunc](button.data)" 
+            [ngClass]="button.type">{{button.text}}</button>
+            <button id="user-cancel-button" class="gray" (click)="modalService.alertData.visible=false">Cancelar</button>
+        </div>
+    </div>
+</div>
+  

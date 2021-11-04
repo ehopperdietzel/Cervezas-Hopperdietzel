@@ -1,0 +1,16 @@
+<div id="users-section" class="section">
+
+    <div class="top-bar">
+      <div id="add-user-button" class="button plus" (click)="showUserModal()"></div>
+      <div class="search-input">
+        <img src="assets/img/icons/search.png"/>
+        <input type="text" placeholder="Buscar" (input)="searchUsers($event)"/>
+      </div>
+    </div>
+  
+    <div class="bottom-menu">
+        <custom-table [columns]="columns" [rows]="rows" (rowRightClick)="rowRightClick($event)"></custom-table>
+    </div>
+  
+  </div>
+  

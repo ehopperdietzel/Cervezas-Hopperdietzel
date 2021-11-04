@@ -1,0 +1,32 @@
+#add-user-button
+{
+    margin-left: 12px;
+}
+#users-modal
+{
+    margin-bottom: 10vh;
+}
+#users-modal .buttons-container
+{
+    width:100%;
+    display: flex;
+    justify-content: flex-start;
+}
+#users-modal .buttons-container button
+{
+    flex-grow: 1;
+}
+#users-modal input
+{
+    width:300px;
+}
+td.habilitado
+{
+    color:var(--light-green);
+    font-weight: bold;
+}
+td.deshabilitado
+{
+    color:var(--red);
+    font-weight: bold;
+}

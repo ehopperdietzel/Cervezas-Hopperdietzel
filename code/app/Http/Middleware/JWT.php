@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use DateTime;
+use DateInterval;
 use Illuminate\Http\Request;
 
 function base64url_encode($data)
@@ -25,26 +27,45 @@ class JWT
 
     public function handle(Request $request, Closure $next)
     {
+        # Check if auth header exists
+        if(!$request->hasHeader('Authorization'))
+            return response()->json(['error' => 'Missing authorization token.'], 404);
 
-        if(!$request->token)
-            return response()->json(['error' => 'Token Invalido.'], 404);
+        # Reads token
+        $token = $request->header('Authorization');
 
+        # Read secret from env conf
         $JWTSecret = env("JWT_SECRET");
 
-        $tokenParts = explode(".", $request->token);
+        # Splits token
+        $tokenParts = explode(".",explode(" ",$token)[1]);
 
+        # Must containt 3 parts
         if(count($tokenParts) != 3)
             response()->json(['error' => 'Token Invalido.'], 404);
 
+        # Calculates hash
         $hash = hash_hmac("sha256",$tokenParts[0].".".$tokenParts[1],$JWTSecret);
 
+        # If both hashes matche
         if($hash == $tokenParts[2])
         {
-            $request->jwtUserId = strval(json_decode(base64url_decode($tokenParts[1]))->usr);
+            # Reads token data
+            $tokenData = json_decode(base64url_decode($tokenParts[1]));
+
+            # Check if token expired
+            if(DateTime::createFromFormat('Y-m-d H:i:s', $tokenData->expirationDate) > new DateTime('NOW'))
+            {
+                $request->jwtUserId = $tokenData->userId;
+            }
+            else
+            {
+                return response()->json(['error' => 'Expired token.'], 404);
+            }
         }
         else
         {
-            return response()->json(['error' => 'Token Invalido.'], 404);
+            return response()->json(['error' => 'Invalid token.'], 404);
         }
 
         return $next($request);
@@ -62,10 +83,14 @@ class JWT
             "typ" => "JWT"
         )));
 
+        # Token expires in 15 days
+        $expireDate = (new DateTime('NOW'))->add(new DateInterval('P15D'));
+
         $payload = base64url_encode(json_encode(array
         (
-            "id" => strval($userId),
-            "name" => $userName
+            "userId" => $userId,
+            "username" => $userName,
+            "expirationDate" => $expireDate->format('Y-m-d H:i:s')
         )));
 
         return $header.".".$payload.".".hash_hmac("sha256",$header.".".$payload,$JWTSecret);

@@ -1,2 +1,5 @@
-<login-panel (loginAlert)="checkSession()" *ngIf="currentPanel == 'loginPanel'"></login-panel>
-<admin-panel (logoutAlert)="checkSession()" *ngIf="currentPanel == 'adminPanel'"></admin-panel>
+<user-modal></user-modal>
+<alert-modal></alert-modal>
+<context-menu></context-menu>
+<login-panel *ngIf="session.getUserId() < 0"></login-panel>
+<admin-panel *ngIf="session.getUserId() >= 0"></admin-panel>

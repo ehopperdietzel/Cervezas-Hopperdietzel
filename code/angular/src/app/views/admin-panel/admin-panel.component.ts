@@ -1,6 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { SectionsMenuComponent } from './sections-menu/sections-menu.component';
-
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { SessionService } from 'src/app/services/session.service';
 @Component({
   selector: 'admin-panel',
   templateUrl: './admin-panel.component.html',
@@ -22,7 +21,13 @@ export class AdminPanelComponent implements OnInit {
 
   currentSection : string = "Usuarios";
 
-  constructor() { }
+
+  public session : SessionService;
+
+  constructor(public sessionService : SessionService) 
+  { 
+    this.session = sessionService;
+  }
 
   @Output() logoutAlert = new EventEmitter();
 
@@ -30,8 +35,7 @@ export class AdminPanelComponent implements OnInit {
   {
     if(section == "Salir")
     {
-      localStorage.removeItem("token");
-      this.logoutAlert.emit();
+      this.session.logout();
     }
     else
       this.currentSection = section;
