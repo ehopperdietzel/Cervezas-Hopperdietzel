@@ -14,13 +14,13 @@ pipeline {
         stages {
           stage('Install') {
             steps {
-                sh 'apt-get update'
-                sh 'apt update && sudo apt install wget php-cli php-zip unzip curl'
-                sh 'curl -sS https://getcomposer.org/installer |php'
-                sh 'mv composer.phar /usr/local/bin/composer'
-                sh 'apt install nodejs'
-                sh 'apt install npm'
-                sh 'npm install -g @angular/cli'
+                sh 'sudo apt-get update'
+                sh 'sudo apt update && sudo apt install wget php-cli php-zip unzip curl'
+                sh 'sudo curl -sS https://getcomposer.org/installer |php'
+                sh 'sudo mv composer.phar /usr/local/bin/composer'
+                sh 'sudo apt install nodejs'
+                sh 'sudo apt install npm'
+                sh 'sudo npm install -g @angular/cli'
                 dir('code') {
                     sh 'composer install'
                     dir('angular') {
