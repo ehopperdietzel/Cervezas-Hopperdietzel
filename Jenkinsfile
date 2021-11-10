@@ -4,7 +4,7 @@ pipeline {
     stage('Checkout, Build') {
         agent {
           docker {
-            image 'composer:1.9.3'
+            image 'ubuntu:latest'
             args '-p 3001:3000'
           }
         }
@@ -15,6 +15,9 @@ pipeline {
           stage('Install') {
             steps {
                 sh 'apt-get update'
+                sh 'apt update && sudo apt install wget php-cli php-zip unzip curl'
+                sh 'curl -sS https://getcomposer.org/installer |php'
+                sh 'mv composer.phar /usr/local/bin/composer'
                 sh 'apt install nodejs'
                 sh 'apt install npm'
                 sh 'npm install -g @angular/cli'
