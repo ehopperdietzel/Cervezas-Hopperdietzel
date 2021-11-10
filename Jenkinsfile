@@ -4,7 +4,7 @@ pipeline {
     stage('Checkout, Build') {
         agent {
           docker {
-            image 'ubuntu:latest'
+            image 'ubuntu:xenial'
             args '-p 3001:3000'
           }
         }
