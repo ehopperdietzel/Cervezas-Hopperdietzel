@@ -4,8 +4,8 @@ pipeline {
     stage('Checkout, Build') {
         agent {
           docker {
-            image 'laravel:latest'
-            args '-p 3001:3000'
+            image 'ubuntu:xenial'
+            args '-u root:vps218 -p 3001:3000'
           }
         }
         environment {
@@ -14,8 +14,18 @@ pipeline {
         stages {
           stage('Install') {
             steps {
+                sh 'apt-get update'
+                sh 'apt-get -y install wget php-cli php-zip unzip curl'
+                sh 'curl -sS https://getcomposer.org/installer |php'
+                sh 'mv composer.phar /usr/local/bin/composer'
+                sh 'apt-get -y install nodejs'
+                sh 'apt-get -y install npm'
+                sh 'npm install -g @angular/cli'
                 dir('code') {
                     sh 'composer install'
+                    dir('angular') {
+                        sh 'npm install'
+                    }
                 }
             }
           }
@@ -23,6 +33,10 @@ pipeline {
             steps {
                 dir('code') {
                     sh 'php artisan migrate'
+                    dir('angular') {
+                        sh 'ng build'
+                        sh 'mv -f ../public/hopperdietzel/* ../public/'
+                    }
                 }
             }
           }
