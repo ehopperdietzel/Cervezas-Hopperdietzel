@@ -45,7 +45,7 @@ pipeline {
         sh 'mkdir /var/www/hopperdietzel'
         sh 'cp -Rp code/** /var/www/hopperdietzel'
         sh 'docker stop hopperdietzel || true && docker rm hopperdietzel || true'
-        sh 'docker run -dit --name hopperdietzel -p 8004:80 -v /var/www/hopperdietzel/:/usr/local/apache2/htdocs/ httpd:2.4'
+        sh 'docker run -dit --name hopperdietzel -p 8004:80 -v /var/www/hopperdietzel/public:/usr/local/apache2/htdocs/ httpd:2.4'
       }
     }
   }
