@@ -32,7 +32,7 @@ pipeline {
                     sh 'php artisan migrate'
                     dir('angular') {
                         sh 'ng build'
-                        sh 'mv ../public/hopperdietzel/* ../public/'
+                        sh 'mv -f ../public/hopperdietzel/* ../public/'
                     }
                 }
             }
