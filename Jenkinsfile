@@ -5,7 +5,7 @@ pipeline {
         agent {
           docker {
             image 'ubuntu:xenial'
-            args '-p 3001:3000'
+            args '-u root:jenkins -p 3001:3000'
           }
         }
         environment {
