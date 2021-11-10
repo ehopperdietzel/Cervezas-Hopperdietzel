@@ -22,7 +22,7 @@ pipeline {
           stage('Build') {
             steps {
                 dir('code') {
-                    sh 'php artisan migrate --force'
+                    //sh 'php artisan migrate --force'
                 }
             }
           }
