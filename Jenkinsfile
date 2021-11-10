@@ -4,7 +4,7 @@ pipeline {
     stage('Checkout, Build') {
         agent {
           docker {
-            image 'laravel:latest'
+            image 'bitnami/laravel:latest'
             args '-p 3001:3000'
           }
         }
