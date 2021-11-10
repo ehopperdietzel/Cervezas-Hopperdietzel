@@ -15,7 +15,7 @@ pipeline {
           stage('Install') {
             steps {
                 sh 'apt-get update'
-                sh 'apt install wget php-cli php-zip unzip curl'
+                sh 'apt-get -y install wget php-cli php-zip unzip curl'
                 sh 'curl -sS https://getcomposer.org/installer |php'
                 sh 'mv composer.phar /usr/local/bin/composer'
                 sh 'apt install nodejs'
