@@ -18,8 +18,8 @@ pipeline {
                 sh 'apt-get -y install wget php-cli php-zip unzip curl'
                 sh 'curl -sS https://getcomposer.org/installer |php'
                 sh 'mv composer.phar /usr/local/bin/composer'
-                sh 'apt install nodejs'
-                sh 'apt install npm'
+                sh 'apt-get -y install nodejs'
+                sh 'apt-get -y install npm'
                 sh 'npm install -g @angular/cli'
                 dir('code') {
                     sh 'composer install'
