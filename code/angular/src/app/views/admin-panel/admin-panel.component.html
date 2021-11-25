@@ -1,10 +1,10 @@
 <div id="admin-panel">
 
-    <sections-menu (sectionChanged)="selectSection($event)" [sections]="sections" [currentSection]="currentSection" [username]="session.getUsername()"></sections-menu>
+    <sections-menu></sections-menu>
   
     <div id="right-menu">
-      <users-section></users-section>
-      
+      <users-section *ngIf="sessionService.currentSection == 'Usuarios'"></users-section>
+      <products-section *ngIf="sessionService.currentSection == 'Productos'"></products-section>
     </div>
   
     

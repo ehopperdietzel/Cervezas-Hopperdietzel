@@ -14,7 +14,32 @@ export class UsersSectionComponent implements OnInit {
 
   public keys : Array<string> = ["firstname","lastname","email","password","status"];
   public usersModal : UserModalComponent;
-  public columns : Array<Array<string>> = [["Nombre","firstname"],["Apellido","lastname"],["Email","email"],["Contraseña","password"],["Estado","status"]];
+  public columns : Array<any> = [
+    {
+      title:'Nombre',
+      key:'firstname',
+      type:'text'
+    },
+    {
+      title:'Apellido',
+      key:'lastname',
+      type:'text'
+    },
+    {
+      title:'Email',
+      key:'email',
+      type:'text'
+    },
+    {
+      title:'Contraseña',
+      key:'password',
+      type:'text'
+    },
+    {
+      title:'Estado',
+      key:'status',
+      type:'statusText'
+    }];
   public rows : Array<any> = [];
 
   constructor(private modals:ModalService, 

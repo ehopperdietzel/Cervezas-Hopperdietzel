@@ -7,12 +7,30 @@ use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests\GetUsersRequest;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\LoginRequest;
 
 class Users extends Model
 {
 
     public $fillable = ['firstname','lastname','email','password','status'];
     public $timestamps = false;
+
+    public function login(LoginRequest $request)
+    {
+        $user = Users::query()->where(['email' => $request->email,'password' => $request->password])->first();
+
+        if($user)
+        {
+            return [
+                "username" => $user->firstname." ".$user->lastname,
+                "id" => $user->id
+            ];
+        }
+        else
+        {
+            abort(401, 'Invalid credentials.');
+        }
+    }
 
     public function createNewUser(CreateUserRequest $request)
     {

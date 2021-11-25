@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class CustomTableComponent implements OnInit {
 
   @Input() public rows : Array<any> = [];
-  @Input() public columns : Array<Array<string>> = [];
+  @Input() public columns : Array<any> = [];
   @Output() public rowRightClick: EventEmitter<any> = new EventEmitter();
   
 

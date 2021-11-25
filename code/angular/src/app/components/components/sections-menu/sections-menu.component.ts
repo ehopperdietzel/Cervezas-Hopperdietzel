@@ -1,5 +1,6 @@
 import { Component, OnInit, Input , Output, EventEmitter} from '@angular/core';
 import { LoadingIndicatorService } from 'src/app/services/loading-indicator.service';
+import { SessionService } from 'src/app/services/session.service';
 
 @Component({
   selector: 'sections-menu',
@@ -8,13 +9,7 @@ import { LoadingIndicatorService } from 'src/app/services/loading-indicator.serv
 })
 export class SectionsMenuComponent implements OnInit {
 
-  constructor(public loadingIndicatorService : LoadingIndicatorService) { }
-
-  @Input() loading = false;
-  @Input() sections : any = [];
-  @Input() currentSection : string = "";
-  @Input() username : string = "";
-  @Output() sectionChanged = new EventEmitter();
+  constructor(public loadingIndicatorService : LoadingIndicatorService,public sessionService : SessionService) {}
 
   ngOnInit(): void 
   {

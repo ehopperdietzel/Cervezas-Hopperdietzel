@@ -1,0 +1,59 @@
+.add-user-button
+{
+  margin-left: 12px;
+}
+.go-back-button
+{
+    margin-left: 12px;
+}
+.prices-info input
+{
+    margin-left: 0;
+}
+.star-button,.star-button-disabled
+{
+    margin: 10px;
+}
+.product-view
+{
+    width:450px;
+    padding:30px;
+}
+.product-view .title
+{
+    font-size: 26px;
+    color:var(--dark-gray);
+    border-bottom: 1px solid var(--light-gray);
+    padding-bottom: 10px;
+}
+.product-image
+{
+    margin-right: 15px;
+    border:4px solid #FFF;
+    box-shadow: 0px 0px 2px 0px;
+    border-radius: 2px;
+}
+.h-box-1
+{
+    margin-top:20px;
+    margin-bottom:20px;
+    display: flex;
+}
+.color-picker
+{
+    width:194px;
+    height:34px;
+}
+table
+{
+    font-weight: bold;
+    color:var(--dark-gray);
+}
+.prices-info table
+{
+    margin-top: 10px;
+}
+.mini-add-button
+{
+    margin-left: calc(50% - 14px);
+}

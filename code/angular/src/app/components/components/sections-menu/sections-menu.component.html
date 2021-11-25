@@ -3,16 +3,16 @@
     <div class="top">
       <div class="text-container">
         <div class="title">HOPPERDIETZEL</div>
-        <div class="username">{{username}}</div>
+        <div class="username">{{sessionService.getUsername()}}</div>
       </div>
       <div id="loading-indicator" [ngClass]="(loadingIndicatorService.anyLoading())?'loading':''"></div>
     </div>
 
-    <div id="menu-sections" *ngFor="let section of sections">
-        <div id="users-section-button" class="section-button pointer" (click)="sectionChanged.emit(section.name)">
+    <div id="menu-sections" *ngFor="let section of sessionService.sections">
+        <div *ngIf="(sessionService.getUserId() == 0 && section.admin == true) || (sessionService.getUserId() != 0 && section.user == true)" id="users-section-button" class="section-button pointer" (click)="sessionService.goToSection(section.name)">
             <img src="{{section.icon}}">
             <div class="section-name">{{section.name}}</div>
-            <div *ngIf="section.name == currentSection"class="select-indicator"></div>
+            <div *ngIf="section.name == sessionService.currentSection" class="select-indicator"></div>
         </div>
     </div>
 

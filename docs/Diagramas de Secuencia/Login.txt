@@ -1,0 +1,34 @@
+title Login
+actor Usuario
+activate index.html
+activate LoginComponent
+Usuario->index.html:Accede al panel de login
+index.html->LoginComponent:loadLoginView()
+deactivate index.html
+deactivate LoginComponent
+
+Usuario->LoginComponent:Click en botón de login
+activate LoginComponent
+LoginComponent->SessionsService:login(username,password)
+activate SessionsService
+LoginComponent<--SessionsService:<Observable>
+SessionsService->(2)HTTP Server:POST /login
+deactivate SessionsService
+activate HTTP Server
+HTTP Server->UsersController:login(request)
+deactivate HTTP Server
+activate UsersController
+UsersController->UsersModel:login(request)
+database MySQL DB
+UsersModel->MySQL DB:query()
+MySQL DB-->UsersModel:userId,username
+UsersModel-->UsersController:generateToken(userId,username)
+UsersController-->(2)LoginComponent:TOKEN (HTTP OK 200)
+deactivate UsersController
+LoginComponent-->index.html:localStorage.save(TOKEN)
+LoginComponent-->index.html:loadAdminView()
+deactivate LoginComponent
+
+
+
+

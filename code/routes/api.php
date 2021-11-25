@@ -11,8 +11,6 @@ Route::group(['middleware' => ['cors']], function () {
     Route::patch('/users', 'App\Http\Controllers\UsersController@updateUser');
     Route::delete('/users/{id}', 'App\Http\Controllers\UsersController@deleteUser');
 
-    Route::get('/test', function () {
-        return 'Working';
-    });
+    Route::post('/products', 'App\Http\Controllers\ProductsController@createProduct');
 });
 

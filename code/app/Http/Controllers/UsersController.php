@@ -21,7 +21,7 @@ class UsersController extends Controller
 
     public function createUser(CreateUserRequest $request)
     {
-        if($request->jwtUserId == 0)
+        if($request->get('JWTID') == 0)
         {
             $id = Users::createNewUser($request);
             return response()->json(['userId' => $id], 200);
@@ -31,7 +31,7 @@ class UsersController extends Controller
 
     public function login(LoginRequest $request)
     {
-
+    
         // Valida credenciales de usuario root
         if($request->email == env("ROOT_EMAIL") && $request->password == env("ROOT_PASSWORD"))
         {
@@ -41,7 +41,12 @@ class UsersController extends Controller
         }
         else
         {
-            abort(401, 'Invalid credentials.');
+            // Verifica si es un usuario normal
+            $user = Users::login($request);
+
+            return response()->json([
+                'access_token' => JWT::createToken($user['id'],$user['username'])
+            ]);
         }
 
         return $hostname;
@@ -49,7 +54,7 @@ class UsersController extends Controller
 
     public function getUsers(GetUsersRequest $request)
     {
-        if($request->jwtUserId == 0)
+        if($request->get('JWTID') == 0)
         {
             return json_encode(Users::getUsersWithPassword($request));
         }
@@ -58,7 +63,7 @@ class UsersController extends Controller
 
     public function updateUser(UpdateUserRequest $request)
     {
-        if($request->jwtUserId == 0)
+        if($request->get('JWTID') == 0)
         {
             Users::updateUser($request);
             return response()->json(['status' => "success"],200);
@@ -68,7 +73,7 @@ class UsersController extends Controller
 
     public function deleteUser(DeleteUserRequest $request)
     {
-        if($request->jwtUserId == 0)
+        if($request->get('JWTID') == 0)
         {
             Users::deleteUser($request);
             return response()->json(['status' => "success"],200);

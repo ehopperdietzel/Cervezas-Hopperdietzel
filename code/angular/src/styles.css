@@ -67,6 +67,60 @@ button.text-only
   background:none;
   color:var(--gray);
 }
+.no-image
+{
+  height:128px;
+  width:128px;
+  background-image: url('assets/img/icons/no-image.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.button.mini-add-button
+{
+  height:28px;
+  width:28px;
+  background-image: url('assets/img/icons/mini-add-button.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.button.delete-button
+{
+  height:16px;
+  width:16px;
+  background-image: url('assets/img/icons/delete.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.button.star-button-disabled
+{
+  height:16px;
+  width:16px;
+  background-image: url('assets/img/icons/disabled-star.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.button.star-button
+{
+  height:16px;
+  width:16px;
+  background-image: url('assets/img/icons/star.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.button.go-back-button
+{
+  height:28px;
+  width:28px;
+  background-image: url('assets/img/icons/back.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
 .button.plus
 {
   height:36px;

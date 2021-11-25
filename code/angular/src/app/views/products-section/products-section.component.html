@@ -1,0 +1,84 @@
+<div id="products-section" class="section">
+
+    <div class="top-bar">
+
+        <!-- Table view tools -->
+        <div *ngIf="!displayingProduct" class="button plus add-user-button" (click)="addProduct()"></div>
+        <div *ngIf="!displayingProduct" class="search-input">
+            <img src="assets/img/icons/search.png"/>
+            <input type="text" placeholder="Buscar"/>
+        </div>
+
+        <!-- Product view tools -->
+        <div *ngIf="displayingProduct" class="button go-back-button" (click)="goBack()"></div>
+        <button *ngIf="displayingProduct" style="margin-left:10px" class="light-green" (click)="uploadNewProduct()">Guardar</button>
+    </div>
+  
+    <div class="bottom-menu">
+
+        <custom-table *ngIf="!displayingProduct" [columns]="columns" [rows]="rows" (rowRightClick)="rowRightClick($event)"></custom-table>
+
+        <div *ngIf="displayingProduct" class="product-view">
+
+            <div class="product-info">
+                <div class="title">Información General</div>
+                <div class="h-box-1">
+
+                    <!-- Imagen -->
+                    <div *ngIf="!imageChanged && currentProductData.image" class="product-image no-image button" (click)="imagePicker.click()" [ngStyle]="{ 'background-image': 'url('+currentProductData.image+')'}"></div>
+                    <div *ngIf="!imageChanged && !currentProductData.image" class="product-image no-image button" (click)="imagePicker.click()"></div>
+                    <div *ngIf="imageChanged" class="product-image no-image button" (click)="imagePicker.click()" [ngStyle]="{ 'background-image': 'url('+currentProductData.image+')'}"></div>
+                    
+                    <table class="product-form">
+                        <tr>
+                            <td>Nombre:</td>
+                            <td><input type="text" placeholder="Nombre del producto" [(ngModel)]="currentProductData.name"/></td>
+                        </tr>
+                        <tr>
+                            <td>Alias:</td>
+                            <td><input type="text" placeholder="Nombre abreviado" [(ngModel)]="currentProductData.alias"/></td>
+                        </tr>
+                        <tr>
+                            <td>Color:</td>
+                            <td><input type="color" class="color-picker" [(ngModel)]="currentProductData.color"/></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="prices-info">
+                <div class="title">Precios</div>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th align="left">Tipo de Precio</th>
+                        <th align="left">Precio</th>
+                        <th></th>
+                    </tr>
+
+                    <tbody *ngFor="let price of currentProductData.prices;let index = index;">
+                        <tr>
+
+                            <td>
+                                <div *ngIf="price.default" class="button star-button"></div>
+                                <div *ngIf="!price.default" class="button star-button-disabled" (click)="setDefaultPrice(index)"></div>
+                            </td>
+                            <td><input placeholder="Nombre descriptivo del precio" style="width:220px" type="text" [(ngModel)]="currentProductData.prices[index].name"/></td>
+                            <td><input placeholder="Precio en CLP" style="width:100px" type="text" [(ngModel)]="currentProductData.prices[index].price"/></td>
+                            <td><div class="button delete-button"></div></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+                
+                <div class="button mini-add-button" (click)="addPrice()"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <input style="display:none" accept="image/*" type="file" #imagePicker (change)="previewImage(imagePicker.files)"/>
+
+</div>
+  

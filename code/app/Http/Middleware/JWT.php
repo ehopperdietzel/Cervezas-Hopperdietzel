@@ -56,7 +56,7 @@ class JWT
             # Check if token expired
             if(DateTime::createFromFormat('Y-m-d H:i:s', $tokenData->expirationDate) > new DateTime('NOW'))
             {
-                $request->jwtUserId = $tokenData->userId;
+                $request->attributes->add(['JWTID' => $tokenData->userId]);
             }
             else
             {
