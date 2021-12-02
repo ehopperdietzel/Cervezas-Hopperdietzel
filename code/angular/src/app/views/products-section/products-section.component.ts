@@ -24,13 +24,18 @@ export class ProductsSectionComponent implements OnInit {
       type:'text'
     },
     {
-      title:'Precio por defecto',
-      key:'name',
+      title:'Alias',
+      key:'alias',
       type:'text'
     },
     {
-      title:'Cantidad disponible',
-      key:'avalaible',
+      title:'Precio por defecto',
+      key:'defaultPrice',
+      type:'text'
+    },
+    {
+      title:'Última Modificación',
+      key:'lastModificationTime',
       type:'text'
     }];
 
@@ -39,6 +44,8 @@ export class ProductsSectionComponent implements OnInit {
   public displayingProduct : boolean = false;
   public adding : boolean = false;
   public imageChanged : boolean = false;
+
+  public products : any = [];
 
   public currentProductData : any = {
     name:"",
@@ -55,7 +62,29 @@ export class ProductsSectionComponent implements OnInit {
     ]
   }
 
-  ngOnInit(): void {
+  ngOnInit() : void 
+  {
+    this.getProducts();
+  }
+
+  public getProducts() : void
+  {
+    this.loadingIndicatorService.loadingStates["getProducts"] = true;
+
+    this.productsService.getProducts().subscribe(
+      res => 
+      {
+        this.loadingIndicatorService.loadingStates["getProducts"] = false;
+        //this.usersModal.close();
+        this.rows = res;
+        console.log(res);
+      },
+      err => 
+      {
+        this.loadingIndicatorService.loadingStates["getProducts"] = false;
+        //this.usersModal.errorMessage = err.error.message;
+        console.log(err);
+      });
   }
 
   public addProduct() : void
@@ -90,6 +119,22 @@ export class ProductsSectionComponent implements OnInit {
     })
   }
 
+  public getCurrentProductDataImage() : string
+  {
+    if(!this.currentProductData.image && !this.imageChanged)
+      return "assets/img/icons/no-image.jpg";
+    else if(this.imageChanged)
+      return this.currentProductData.image;
+    else
+      return "../../../assets/img/products/"+this.currentProductData.id+".jpg";
+  }
+
+  public removeImage() : void
+  {
+    this.currentProductData.image = false;
+    this.imageChanged = false;
+  }
+
   public setDefaultPrice(index : number) : void 
   {
     for(let i = 0; i < this.currentProductData.prices.length; i++)
@@ -112,11 +157,14 @@ export class ProductsSectionComponent implements OnInit {
     formData.append("color", this.currentProductData.color);
     formData.append("prices", JSON.stringify(this.currentProductData.prices));
 
+    this.loadingIndicatorService.loadingStates["createProduct"] = true;
+
     this.productsService.createProduct(formData).subscribe(
       res => 
       {
         this.loadingIndicatorService.loadingStates["createProduct"] = false;
         //this.usersModal.close();
+        console.log(res);
       },
       err => 
       {

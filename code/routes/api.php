@@ -12,5 +12,6 @@ Route::group(['middleware' => ['cors']], function () {
     Route::delete('/users/{id}', 'App\Http\Controllers\UsersController@deleteUser');
 
     Route::post('/products', 'App\Http\Controllers\ProductsController@createProduct');
+    Route::get('/products', 'App\Http\Controllers\ProductsController@getProducts');
 });
 

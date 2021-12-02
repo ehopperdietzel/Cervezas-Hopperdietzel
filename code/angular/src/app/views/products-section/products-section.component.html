@@ -25,9 +25,12 @@
                 <div class="h-box-1">
 
                     <!-- Imagen -->
-                    <div *ngIf="!imageChanged && currentProductData.image" class="product-image no-image button" (click)="imagePicker.click()" [ngStyle]="{ 'background-image': 'url('+currentProductData.image+')'}"></div>
-                    <div *ngIf="!imageChanged && !currentProductData.image" class="product-image no-image button" (click)="imagePicker.click()"></div>
-                    <div *ngIf="imageChanged" class="product-image no-image button" (click)="imagePicker.click()" [ngStyle]="{ 'background-image': 'url('+currentProductData.image+')'}"></div>
+                    <div class="product-image" [ngStyle]="{ 'background-image': 'url('+getCurrentProductDataImage()+')'}">
+                        <div class="image-buttons">
+                            <div *ngIf="currentProductData.image || imageChanged" class="remove-button" (click)="removeImage()"></div>
+                            <div class="upload-button" (click)="imagePicker.click()"></div>
+                        </div>
+                    </div>
                     
                     <table class="product-form">
                         <tr>

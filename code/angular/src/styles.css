@@ -67,15 +67,6 @@ button.text-only
   background:none;
   color:var(--gray);
 }
-.no-image
-{
-  height:128px;
-  width:128px;
-  background-image: url('assets/img/icons/no-image.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
 .button.mini-add-button
 {
   height:28px;

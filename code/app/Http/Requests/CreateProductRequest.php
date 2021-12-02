@@ -9,8 +9,8 @@ class CreateProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'alpha|required|max:32',
-            'alias' => 'alpha|required|max:32',
+            'name' => 'regex:/^[a-zA-Z0-9\s]+$/|required|max:32',
+            'alias' => 'regex:/^[a-zA-Z0-9\s]+$/|required|max:32',
             'image' => [ 'nullable','image','mimes:jpg,png,jpeg' ],
             'color' => 'required',
             'prices' => 'required',
