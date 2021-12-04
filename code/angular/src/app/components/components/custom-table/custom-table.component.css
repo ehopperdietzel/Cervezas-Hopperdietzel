@@ -30,6 +30,18 @@
   font-size:13px;
   color:var(--dark-gray);
 }
+.table tr
+{
+  cursor: pointer;
+}
+.table tr:hover
+{
+  opacity: 0.85;
+}
+.table tr:active
+{
+  opacity: 1;
+}
 .table tbody
 {
   display: block;
@@ -44,4 +56,12 @@
   display: table;
   width: 100%;
   table-layout: fixed;
+}
+.image
+{
+  height:64px;
+  width:64px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }

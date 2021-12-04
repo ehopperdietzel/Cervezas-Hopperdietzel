@@ -11,12 +11,14 @@
 
         <!-- Product view tools -->
         <div *ngIf="displayingProduct" class="button go-back-button" (click)="goBack()"></div>
-        <button *ngIf="displayingProduct" style="margin-left:10px" class="light-green" (click)="uploadNewProduct()">Guardar</button>
+        <button *ngIf="displayingProduct && adding" style="margin-left:10px" class="light-blue" (click)="uploadNewProduct()">Crear</button>
+        <button *ngIf="displayingProduct && !adding" style="margin-left:10px" class="light-green" (click)="uploadNewProduct()">Guardar</button>
+        <button *ngIf="displayingProduct && !adding" style="margin-left:10px" class="red" (click)="deleteProduct()">Eliminar</button>
     </div>
   
     <div class="bottom-menu">
 
-        <custom-table *ngIf="!displayingProduct" [columns]="columns" [rows]="rows" (rowRightClick)="rowRightClick($event)"></custom-table>
+        <custom-table *ngIf="!displayingProduct" [columns]="columns" [rows]="rows" (rowRightClick)="rowRightClick($event)" (rowLeftClick)="rowLeftClick($event)"></custom-table>
 
         <div *ngIf="displayingProduct" class="product-view">
 
@@ -68,7 +70,7 @@
                             </td>
                             <td><input placeholder="Nombre descriptivo del precio" style="width:220px" type="text" [(ngModel)]="currentProductData.prices[index].name"/></td>
                             <td><input placeholder="Precio en CLP" style="width:100px" type="text" [(ngModel)]="currentProductData.prices[index].price"/></td>
-                            <td><div class="button delete-button"></div></td>
+                            <td><div *ngIf="currentProductData.prices.length > 1" (click)="removePrice(index)" class="button delete-button"></div></td>
                         </tr>
                     </tbody>
 

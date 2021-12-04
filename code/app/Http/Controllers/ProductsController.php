@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Middleware\JWT;
 use App\Http\Requests\CreateProductRequest;
 use App\Http\Requests\GetProductsRequest;
+use App\Http\Requests\DeleteProductRequest;
 use App\Models\Products;
 
 class ProductsController extends Controller
@@ -24,5 +25,12 @@ class ProductsController extends Controller
     public function getProducts(GetProductsRequest $request)
     {
         return json_encode(Products::getProducts());
+    }
+
+    public function deleteProduct(DeleteProductRequest $request)
+    {
+
+        Products::deleteProduct($request);
+        return response()->json(['status' => "success"],200);
     }
 }

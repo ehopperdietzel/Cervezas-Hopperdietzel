@@ -29,4 +29,13 @@ export class ProductsService {
     return this.http.get<any>(environment.apiURL + '/products', options);
   }
 
+  public deleteProduct(productId : number) : Observable<any>
+  {
+    var options = 
+    {
+      headers:{Authorization: 'Bearer ' + this.session.getToken()}
+    };
+    return this.http.delete<any>(environment.apiURL + '/products/'+productId.toString(), options);
+  }
+
 }

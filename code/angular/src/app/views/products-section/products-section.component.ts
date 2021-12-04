@@ -14,28 +14,28 @@ export class ProductsSectionComponent implements OnInit {
 
   public columns : Array<any> = [
     {
-      title:'Imagen',
-      key:'imagePath',
-      type:'image'
-    },
-    {
       title:'Producto',
       key:'name',
       type:'text'
     },
     {
       title:'Alias',
-      key:'alias',
-      type:'text'
+      key:'aliasColor',
+      type:'colorText'
     },
     {
       title:'Precio por defecto',
-      key:'defaultPrice',
-      type:'text'
+      key:'defaultPriceValue',
+      type:'money'
     },
     {
       title:'Última Modificación',
       key:'lastModificationTime',
+      type:'text'
+    },
+    {
+      title:'Modificado por',
+      key:'modifiedBy',
       type:'text'
     }];
 
@@ -46,6 +46,8 @@ export class ProductsSectionComponent implements OnInit {
   public imageChanged : boolean = false;
 
   public products : any = [];
+
+  public imageData : any;
 
   public currentProductData : any = {
     name:"",
@@ -67,6 +69,41 @@ export class ProductsSectionComponent implements OnInit {
     this.getProducts();
   }
 
+  public rowLeftClick(event : any) : void
+  {
+    event.preventDefault();
+    this.currentProductData = event.row;
+    this.displayingProduct = true;
+  }
+
+  public removePrice(index:number) : void 
+  {
+    var isDefault = this.currentProductData.prices[index].default;
+    this.currentProductData.prices.splice(index,1);
+    if(isDefault)
+      this.currentProductData.prices[0].default = true;
+  }
+
+  public deleteProduct()
+  {
+    this.loadingIndicatorService.loadingStates["deleteProduct"] = true;
+
+    this.productsService.deleteProduct(this.currentProductData.id).subscribe(
+      res => 
+      {
+        this.loadingIndicatorService.loadingStates["deleteProduct"] = false;
+        this.getProducts();
+        this.displayingProduct = false;
+        console.log(res);
+      },
+      err => 
+      {
+        this.loadingIndicatorService.loadingStates["deleteProduct"] = false;
+        //this.usersModal.errorMessage = err.error.message;
+        console.log(err);
+      });
+  }
+
   public getProducts() : void
   {
     this.loadingIndicatorService.loadingStates["getProducts"] = true;
@@ -76,6 +113,22 @@ export class ProductsSectionComponent implements OnInit {
       {
         this.loadingIndicatorService.loadingStates["getProducts"] = false;
         //this.usersModal.close();
+        for(var i = 0; i < res.length; i++)
+        {
+          res[i].modifiedBy = res[i].userFirstname + " " + res[i].userLastname;
+
+          res[i].aliasColor = {color:res[i].color,text:res[i].alias};
+
+          for(var j = 0; j < res[i].prices.length; j++)
+          {
+            res[i].prices[j].default = res[i].prices[j].id == res[i].defaultPrice;
+            if(res[i].prices[j].default)
+            {
+              res[i].defaultPriceValue = res[i].prices[j].price;
+            }
+          }
+        }
+          
         this.rows = res;
         console.log(res);
       },
@@ -157,6 +210,9 @@ export class ProductsSectionComponent implements OnInit {
     formData.append("color", this.currentProductData.color);
     formData.append("prices", JSON.stringify(this.currentProductData.prices));
 
+    if(this.currentProductData.image != false && this.imageChanged)
+      formData.append("image", this.imageData,"image.jpg");
+
     this.loadingIndicatorService.loadingStates["createProduct"] = true;
 
     this.productsService.createProduct(formData).subscribe(
@@ -164,6 +220,10 @@ export class ProductsSectionComponent implements OnInit {
       {
         this.loadingIndicatorService.loadingStates["createProduct"] = false;
         //this.usersModal.close();
+        this.getProducts();
+        this.displayingProduct = false;
+        this.adding = false;
+        
         console.log(res);
       },
       err => 
@@ -185,7 +245,8 @@ export class ProductsSectionComponent implements OnInit {
       alert("Only images are supported.");
       return;
     }
- 
+    
+    this.imageData = files[0];
     var reader = new FileReader();
     reader.readAsDataURL(files[0]); 
     reader.onload = (_event : any) => { 

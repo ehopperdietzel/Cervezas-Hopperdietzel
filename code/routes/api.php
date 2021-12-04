@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', 'App\Http\Controllers\UsersController@login');
+
     Route::post('/users', 'App\Http\Controllers\UsersController@createUser');
     Route::get('/users', 'App\Http\Controllers\UsersController@getUsers');
     Route::patch('/users', 'App\Http\Controllers\UsersController@updateUser');
@@ -13,5 +14,6 @@ Route::group(['middleware' => ['cors']], function () {
 
     Route::post('/products', 'App\Http\Controllers\ProductsController@createProduct');
     Route::get('/products', 'App\Http\Controllers\ProductsController@getProducts');
+    Route::delete('/products/{id}', 'App\Http\Controllers\ProductsController@deleteProduct');
 });
 

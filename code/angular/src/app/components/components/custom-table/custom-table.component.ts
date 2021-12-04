@@ -10,6 +10,7 @@ export class CustomTableComponent implements OnInit {
   @Input() public rows : Array<any> = [];
   @Input() public columns : Array<any> = [];
   @Output() public rowRightClick: EventEmitter<any> = new EventEmitter();
+  @Output() public rowLeftClick: EventEmitter<any> = new EventEmitter();
   
 
   constructor() { }
@@ -17,9 +18,23 @@ export class CustomTableComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public moneyFormat(x : number) : string 
+  {
+    if(x == undefined)
+      return "$0";
+
+    return "$"+x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
   public onRightClick(event : any, row : any) : void
   {
     event["row"] = row;
     this.rowRightClick.emit(event);
+  }
+
+  public onLeftClick(event : any, row : any) : void
+  {
+    event["row"] = row;
+    this.rowLeftClick.emit(event);
   }
 }

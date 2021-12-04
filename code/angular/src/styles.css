@@ -62,6 +62,7 @@ button
 button.light-blue   { background:var(--light-blue);}
 button.light-green  { background:var(--light-green);}
 button.gray         { background:var(--gray);}
+button.red         { background:var(--red);}
 button.text-only
 {
   background:none;
