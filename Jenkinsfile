@@ -16,7 +16,7 @@ pipeline {
     stage('Angular') {
       agent {
         docker { 
-          image 'docker pull trion/ng-cli:latest'
+          image 'trion/ng-cli:latest'
         }
       }
       environment {
