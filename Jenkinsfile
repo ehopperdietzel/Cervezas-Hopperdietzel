@@ -16,7 +16,8 @@ pipeline {
     stage('Angular') {
       agent {
         docker { 
-          image 'portainer/angular-builder'        }
+          image 'node:17'
+        }
       }
       environment {
         HOME = '.'
