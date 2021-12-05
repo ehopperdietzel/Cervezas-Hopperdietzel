@@ -25,7 +25,7 @@ pipeline {
         stage('Install') {
           steps {
             dir('code/angular') {
-                sh 'npm install -g @angular/cli'
+                sh 'npm install @angular/cli'
                 sh 'npm install'
             }
           }
@@ -33,7 +33,7 @@ pipeline {
         stage('Build') {
           steps {
             dir('code/angular') {
-              sh 'ng build'
+              sh 'npm run ng build'
             }
           }
         }
