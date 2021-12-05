@@ -25,6 +25,7 @@ pipeline {
         stage('Install') {
           steps {
             dir('code/angular') {
+                sh 'npm install -g @angular/cli'
                 sh 'npm install'
             }
           }
