@@ -67,7 +67,7 @@ pipeline {
             dir('code/laravel') {
               sh 'cp -R public/hopperdietzel/* public/'
               sh 'mv .env.production .env'
-              sh 'php artisan migrate fresh'
+              sh 'php artisan migrate:fresh'
             }
           }
         }
