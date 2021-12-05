@@ -9,6 +9,8 @@ pipeline {
           args '-p 7500:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=hopperdietzel -e MYSQL_USER=prueba -e MYSQL_PASSWORD=prueba'
         }
       }
+      steps {
+      }
     }
     stage('Angular') {
       agent {
