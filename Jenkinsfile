@@ -65,7 +65,7 @@ pipeline {
         stage('Build') {
           steps {
             dir('code/laravel') {
-              sh 'mv public/hopperdietzel/* public/'
+              sh 'cp -R public/hopperdietzel/* public/'
               sh 'mv .env.production .env'
               sh 'php artisan migrate fresh'
             }
