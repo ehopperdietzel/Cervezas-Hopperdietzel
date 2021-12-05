@@ -16,7 +16,7 @@ pipeline {
     stage('Angular') {
       agent {
         docker { 
-          image 'node:17'
+          image 'docker pull trion/ng-cli:latest'
         }
       }
       environment {
@@ -26,7 +26,6 @@ pipeline {
         stage('Install') {
           steps {
             dir('code/angular') {
-                sh 'npm install @angular/cli'
                 sh 'npm install'
             }
           }
@@ -34,7 +33,7 @@ pipeline {
         stage('Build') {
           steps {
             dir('code/angular') {
-              sh 'node_modules/.bin/ng build'
+              sh 'ng build'
             }
           }
         }
