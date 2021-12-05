@@ -33,7 +33,7 @@ pipeline {
         stage('Build') {
           steps {
             dir('code/angular') {
-              sh 'npm run ng build'
+              sh 'node_modules/.bin/ng build'
             }
           }
         }
