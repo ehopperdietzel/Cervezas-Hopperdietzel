@@ -10,6 +10,7 @@ pipeline {
         }
       }
       steps {
+        sh "echo 'MySQL started.'"
       }
     }
     stage('Angular') {
