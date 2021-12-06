@@ -18,7 +18,6 @@ pipeline {
       agent {
         docker {
           image 'bitnami/laravel:latest'
-          args '-p 7500:3306'
         }
       }
       environment {
