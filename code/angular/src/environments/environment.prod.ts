@@ -1,7 +1,7 @@
 export var environment = 
 {
   production: true,
-  apiURL: '/api',
+  apiURL: 'http://146.83.216.218:8004/api',
   user:
   {
     id:-1,
