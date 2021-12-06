@@ -35,7 +35,7 @@ pipeline {
           steps {
             dir('code/laravel') {
               sh 'mv .env.production .env'
-              sh 'php artisan migrate:fresh'
+              
             }
           }
         }
