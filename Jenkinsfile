@@ -12,7 +12,7 @@ pipeline {
       steps {
         sh 'docker network create hopper-net || true'
         sh 'docker stop hopper-mysql || true && docker rm hopper-mysql || true'
-        sh 'docker run -d --name hopper-mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=hopperdietzel -e MYSQL_USER=prueba -e MYSQL_PASSWORD=prueba mysql:8.0'
+        sh 'docker run -d --net hopper-net --name hopper-mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=hopperdietzel -e MYSQL_USER=prueba -e MYSQL_PASSWORD=prueba mysql:8.0'
       }
     }
 
@@ -97,7 +97,7 @@ pipeline {
         sh 'mkdir /var/www/hopperdietzel'
         sh 'cp -Rp code/laravel/** /var/www/hopperdietzel'
         sh 'docker stop hopperdietzel || true && docker rm hopperdietzel || true'
-        sh 'docker run -dit --name hopperdietzel -p 8004:80 --net hopper-net php:7.2-apache'
+        sh 'docker run -e APACHE_DOCUMENT_ROOT=/var/www/html/public -dit --name hopperdietzel -p 8004:80 --net hopper-net php:7.2-apache'
         sh 'docker cp /var/www/hopperdietzel/. hopperdietzel:/var/www/html/'
       }
     }
