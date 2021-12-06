@@ -13,6 +13,40 @@ pipeline {
         sh "echo 'MySQL started.'"
       }
     }
+
+    stage('Laravel') {
+      agent {
+        docker {
+          image 'bitnami/laravel:latest'
+        }
+      }
+      environment {
+        HOME = '.'
+      }
+      stages {
+        stage('Install') {
+          steps {
+            dir('code/laravel') {
+                sh 'composer install'
+            }
+          }
+        }
+        stage('Build') {
+          steps {
+            dir('code/laravel') {
+              sh 'mv .env.production .env'
+              sh 'php artisan migrate:fresh'
+            }
+          }
+        }
+        stage('Archive') {
+          steps {
+            archiveArtifacts 'code/**'
+          }
+        }
+      }
+    }
+
     stage('Angular') {
       agent {
         docker { 
@@ -35,39 +69,8 @@ pipeline {
             dir('code/angular') {
               sh 'ng build'
             }
-          }
-        }
-        stage('Archive') {
-          steps {
-            archiveArtifacts 'code/laravel/**'
-          }
-        }
-      }
-    }
-
-    stage('Laravel') {
-      agent {
-        docker {
-          image 'bitnami/laravel:latest'
-        }
-      }
-      environment {
-        HOME = '.'
-      }
-      stages {
-        stage('Install') {
-          steps {
-            dir('code/laravel') {
-                sh 'composer install'
-            }
-          }
-        }
-        stage('Build') {
-          steps {
             dir('code/laravel') {
               sh 'cp -R public/hopperdietzel/* public/'
-              sh 'mv .env.production .env'
-              sh 'php artisan migrate:fresh'
             }
           }
         }
