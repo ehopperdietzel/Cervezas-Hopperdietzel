@@ -103,7 +103,7 @@ pipeline {
         sh 'docker stop hopperdietzel || true && docker rm hopperdietzel || true'
         dir('/var/www/hopperdietzel') {
           sh 'docker build -t hopper-app .'
-          sh 'docker run -d --name hopperdietzel -p 8004:80 --net hopper-net -v /var/www/hopperdietzel/code/laravel:/usr/local/apache2/htdocs/ hopper-app'
+          sh 'docker run -d --name hopperdietzel -p 8004:80 --net hopper-net hopper-app'
         }
       }
     }
