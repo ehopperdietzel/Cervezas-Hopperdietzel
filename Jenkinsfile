@@ -103,7 +103,6 @@ pipeline {
           sh 'docker build -t hopper-app .'
           sh 'docker run -dit --name hopperdietzel -p 8004:80 --net hopper-net hopper-app'
         }
-        sh 'docker cp /var/www/hopperdietzel/code/laravel/. hopperdietzel:/var/www/html/'
       }
     }
   }
