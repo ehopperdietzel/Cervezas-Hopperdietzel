@@ -76,7 +76,9 @@ pipeline {
             }
             dir('code/laravel') {
               sh 'cp -R public/hopperdietzel/* public/'
+              sh 'rm -rf public/hopperdietzel/'
             }
+            sh 'rm -rf code/angular/'
           }
         }
         stage('Archive') {
@@ -101,7 +103,7 @@ pipeline {
         sh 'docker stop hopperdietzel || true && docker rm hopperdietzel || true'
         dir('/var/www/hopperdietzel') {
           sh 'docker build -t hopper-app .'
-          sh 'docker run -dit --name hopperdietzel -p 8004:80 --net hopper-net hopper-app'
+          sh 'docker run -dit --name hopperdietzel -p 8004:80 --net hopper-net -v /var/www/hopperdietzel/code/laravel:/usr/local/apache2/htdocs/ hopper-app'
         }
       }
     }
