@@ -96,7 +96,8 @@ pipeline {
         sh 'mkdir /var/www/hopperdietzel'
         sh 'cp -Rp code/laravel/** /var/www/hopperdietzel'
         sh 'docker stop hopperdietzel || true && docker rm hopperdietzel || true'
-        sh 'docker run -dit --name hopperdietzel -p 8004:80 --net hopper-net -v /var/www/hopperdietzel/:/var/www/html/public -e APACHE_DOCUMENT_ROOT=/var/www/html/public/public php:7.1-apache'
+        sh 'docker run -dit --name hopperdietzel -p 8004:80 --net hopper-net -v /var/www/hopperdietzel/:/var/www/html/public/ -e APACHE_DOCUMENT_ROOT="/var/www/html/public/public" php:7.2-apache'
+        sh 'docker exec -it hopperdietzel php /var/www/html/public/artisan migrate:fresh'
       }
     }
   }
