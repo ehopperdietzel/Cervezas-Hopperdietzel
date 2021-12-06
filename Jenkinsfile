@@ -98,7 +98,7 @@ pipeline {
         sh 'cp -Rp code/laravel/** /var/www/hopperdietzel'
         sh 'docker stop hopperdietzel || true && docker rm hopperdietzel || true'
         sh 'docker run -dit --name hopperdietzel -p 8004:80 --net hopper-net php:7.2-apache'
-        sh 'docker cp /var/www/hopperdietzel/** hopperdietzel:/var/www/html/'
+        sh 'docker cp /var/www/hopperdietzel/. hopperdietzel:/var/www/html/'
       }
     }
   }
