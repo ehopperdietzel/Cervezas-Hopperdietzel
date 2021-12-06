@@ -2,7 +2,7 @@
 export var environment = 
 {
   production: false,
-  apiURL: 'http://localhost:8888/api',
+  apiURL: 'http://127.0.0.1:8000/api',
   user:
   {
     id:-1,
