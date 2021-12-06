@@ -2,15 +2,17 @@ pipeline {
   agent none 
   stages {
 
-    stage('Database') {
+    stage('MySQL') {
       agent {
-        docker { 
-          image 'mysql:8.0'
-          args '-p 7500:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=hopperdietzel -e MYSQL_USER=prueba -e MYSQL_PASSWORD=prueba'
-        }
+        label 'master'
+      }
+      options {
+        skipDefaultCheckout()
       }
       steps {
-        sh "echo 'MySQL started.'"
+        sh 'docker network create hopper-net || true'
+        sh 'docker stop hopper-mysql || true && docker rm hopper-mysql || true'
+        sh 'docker run -d --name hopper-mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=hopperdietzel -e MYSQL_USER=prueba -e MYSQL_PASSWORD=prueba mysql:8.0'
       }
     }
 
@@ -18,6 +20,7 @@ pipeline {
       agent {
         docker {
           image 'bitnami/laravel:latest'
+          args '--net hopper-net'
         }
       }
       environment {
@@ -94,7 +97,7 @@ pipeline {
         sh 'mkdir /var/www/hopperdietzel'
         sh 'cp -Rp code/laravel/** /var/www/hopperdietzel'
         sh 'docker stop hopperdietzel || true && docker rm hopperdietzel || true'
-        sh 'docker run -dit --name hopperdietzel -p 8004:80 -p 7500:8889 -v /var/www/hopperdietzel/:/var/www/html/ -e APACHE_DOCUMENT_ROOT=/var/www/html/public php:7.1-apache'
+        sh 'docker run -dit --name hopperdietzel -p 8004:80 --net hopper-net -v /var/www/hopperdietzel/:/var/www/html/public -e APACHE_DOCUMENT_ROOT=/var/www/html/public/public php:7.1-apache'
       }
     }
   }
