@@ -18,6 +18,7 @@ pipeline {
       agent {
         docker {
           image 'bitnami/laravel:latest'
+          args '-p 7500:3306'
         }
       }
       environment {
@@ -35,7 +36,7 @@ pipeline {
           steps {
             dir('code/laravel') {
               sh 'mv .env.production .env'
-              
+              sh 'php artisan migrate:fresh'
             }
           }
         }
