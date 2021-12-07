@@ -101,10 +101,7 @@ pipeline {
         sh 'mkdir /var/www/hopperdietzel'
         sh 'cp -Rp ./** /var/www/hopperdietzel'
         sh 'docker stop hopperdietzel || true && docker rm hopperdietzel || true'
-        dir('/var/www/hopperdietzel') {
-          sh 'docker build -t hopper-app .'
-          sh 'docker run -dit --name hopperdietzel -p 8004:80 --net hopper-net hopper-app'
-        }
+        sh 'docker run -dit --net hopper-net --name hopperdietzel -e TZ=UTC -p 8004:80 -v /var/www/hopperdietzel/code/laravel:/var/www/html -v /var/www/hopperdietzel/code/laravel/apache2.conf:/etc/apache2/apache2.conf ubuntu/apache2'
       }
     }
   }
