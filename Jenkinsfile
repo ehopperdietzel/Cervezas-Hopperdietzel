@@ -68,10 +68,10 @@ pipeline {
         sh 'cp -Rp ./code/laravel/** /var/www/hopperdietzel'
         sh 'docker stop hopperdietzel || true && docker rm hopperdietzel || true'
         sh 'docker run -dit --name hopperdietzel -v /var/www/hopperdietzel/:/home/ -p 8004:8000 --net hopper-net bitnami/laravel:latest'
-        sh 'docker exec hopperdietzel cd /home && composer install'
-        sh 'docker exec hopperdietzel mv /home/.env.production /home/.env'
-        sh 'docker exec hopperdietzel cd /home && php artisan migrate:fresh --no-interaction --force'
-        sh 'docker exec hopperdietzel cd /home && php artisan serve'
+        sh 'docker exec hopperdietzel sh -c "cd /home && composer install"'
+        sh 'docker exec hopperdietzel sh -c "mv /home/.env.production /home/.env"'
+        sh 'docker exec hopperdietzel sh -c "cd /home && php artisan migrate:fresh --no-interaction --force"'
+        sh 'docker exec hopperdietzel sh -c "cd /home && php artisan serve"'
       }
     }
   }
