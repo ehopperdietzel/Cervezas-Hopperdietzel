@@ -8,7 +8,7 @@
 FROM bitnami/laravel:latest
 
 COPY ./code/laravel/ /home/bitnami
-RUN cd /home/bitnami && composer install
+RUN cd /home/bitnami && sudo composer install
 RUN mv /home/bitnami/.env.production /home/bitnami/.env
 
 ENTRYPOINT cd /home/bitnami && php artisan migrate:fresh --no-interaction --force && php artisan serve --host=0.0.0.0 --port=8000
