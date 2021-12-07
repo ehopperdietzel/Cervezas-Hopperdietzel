@@ -11,4 +11,4 @@ COPY ./code/laravel/ /home/bitnami
 RUN cd /home/bitnami && composer install
 RUN mv /home/bitnami/.env.production /home/bitnami/.env
 
-CMD cd /home/bitnami && php artisan migrate:fresh --no-interaction --force && php artisan serve
+ENTRYPOINT cd /home/bitnami && php artisan migrate:fresh --no-interaction --force && php artisan serve --port=8000

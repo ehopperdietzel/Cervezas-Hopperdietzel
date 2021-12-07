@@ -68,8 +68,10 @@ pipeline {
         sh 'cp -Rp ./** /var/www/hopperdietzel'
         sh 'docker stop hopperdietzel || true && docker rm hopperdietzel || true'
         dir('/var/www/hopperdietzel') {
-          sh 'docker build -t hopper-app .'
-          sh 'docker run -d --name hopperdietzel -p 8004:8000 --net hopper-net hopper-app'
+          sh 'docker build --label hopper-image -t hopper-app .'
+          sh 'docker run -dit --name hopperdietzel -p 8004:8000 --net hopper-net hopper-app'
+          sh 'docker image prune --force --filter="label=hopper-image"'
+          sh 'docker ps'
         }
       }
     }
