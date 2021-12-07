@@ -18,40 +18,6 @@ pipeline {
       }
     }
 
-    stage('Laravel') {
-      agent {
-        docker {
-          image 'bitnami/laravel:latest'
-          args '--net hopper-net'
-        }
-      }
-      environment {
-        HOME = '.'
-      }
-      stages {
-        stage('Install') {
-          steps {
-            dir('code/laravel') {
-                sh 'composer install'
-            }
-          }
-        }
-        stage('Build') {
-          steps {
-            dir('code/laravel') {
-              sh 'mv .env.production .env'
-              sh 'php artisan migrate:fresh --no-interaction --force'
-            }
-          }
-        }
-        stage('Archive') {
-          steps {
-            archiveArtifacts 'code/**'
-          }
-        }
-      }
-    }
-
     stage('Angular') {
       agent {
         docker { 
@@ -89,7 +55,7 @@ pipeline {
       }
     }
     
-    stage('Apache') {
+    stage('Laravel') {
       agent {
         label 'master'
       }
@@ -99,12 +65,13 @@ pipeline {
       steps {
         sh 'rm -rf /var/www/hopperdietzel'
         sh 'mkdir /var/www/hopperdietzel'
-        sh 'cp -Rp ./** /var/www/hopperdietzel'
+        sh 'cp -Rp ./code/laravel/** /var/www/hopperdietzel'
         sh 'docker stop hopperdietzel || true && docker rm hopperdietzel || true'
-        dir('/var/www/hopperdietzel') {
-          sh 'docker build -t hopper-app .'
-          sh 'docker run -dit --name hopperdietzel -v /var/www/hopperdietzel/:/var/www/html/ -p 8004:80 --net hopper-net hopper-app'
-        }
+        sh 'docker run -dit --name hopperdietzel -v /var/www/hopperdietzel/:/home/ -p 8004:8000 --net hopper-net bitnami/laravel:latest'
+        sh 'docker exec hopperdietzel cd /home && composer install'
+        sh 'docker exec hopperdietzel mv /home/.env.production /home/.env'
+        sh 'docker exec hopperdietzel cd /home && php artisan migrate:fresh --no-interaction --force'
+        sh 'docker exec hopperdietzel cd /home && php artisan serve'
       }
     }
   }
