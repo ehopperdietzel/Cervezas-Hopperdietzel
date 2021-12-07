@@ -8,6 +8,9 @@
 FROM bitnami/laravel:latest
 
 COPY ./code/laravel/ /home/bitnami
+
+RUN sudo chmod 777 -R /home/bitnami
+RUN sudo chown -R www-data:www-data /home/bitnami
 RUN cd /home/bitnami && sudo composer install
 RUN mv /home/bitnami/.env.production /home/bitnami/.env
 
