@@ -65,13 +65,12 @@ pipeline {
       steps {
         sh 'rm -rf /var/www/hopperdietzel'
         sh 'mkdir /var/www/hopperdietzel'
-        sh 'cp -Rp ./code/laravel/** /var/www/hopperdietzel'
+        sh 'cp -Rp ./** /var/www/hopperdietzel'
         sh 'docker stop hopperdietzel || true && docker rm hopperdietzel || true'
-        sh 'docker run -dit --name hopperdietzel -v /var/www/hopperdietzel/:/home/bitnami/ -p 8004:8000 --net hopper-net bitnami/laravel:latest'
-        sh 'docker exec hopperdietzel sh -c "cd /home/bitnami/ && composer install"'
-        sh 'docker exec hopperdietzel sh -c "mv /home/bitnami/.env.production /home/bitnami/.env"'
-        sh 'docker exec hopperdietzel sh -c "cd /home/bitnami && php artisan migrate:fresh --no-interaction --force"'
-        sh 'docker exec hopperdietzel sh -c "cd /home/bitnami && php artisan serve"'
+        dir('/var/www/hopperdietzel') {
+          sh 'docker build -t hopper-app .'
+          sh 'docker run -d --name hopperdietzel -p 8004:8000 --net hopper-net hopper-app'
+        }
       }
     }
   }
