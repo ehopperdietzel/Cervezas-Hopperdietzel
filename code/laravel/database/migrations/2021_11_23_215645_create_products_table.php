@@ -18,8 +18,8 @@ class CreateProductsTable extends Migration
             $table->string('name',32);
             $table->string('alias',32);
             $table->string('color',7);
-            $table->boolean('image');
-            $table->unsignedBigInteger('defaultPrice');
+            $table->boolean('image')->default(false);
+            $table->unsignedBigInteger('defaultPrice')->nullable();
             $table->timestamp('lastModificationTime', $precision = 0);
             $table->unsignedBigInteger('lastModificationUser');
         });
