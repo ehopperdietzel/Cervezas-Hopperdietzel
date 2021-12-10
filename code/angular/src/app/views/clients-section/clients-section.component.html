@@ -1,0 +1,118 @@
+<div id="products-section" class="section">
+
+    <div class="top-bar">
+
+        <!-- Table view tools -->
+        <div *ngIf="view == 'table'" class="button plus add-user-button" (click)="addItem()"></div>
+        <div *ngIf="view == 'table'" class="search-input">
+            <img src="assets/img/icons/search.png"/>
+            <input type="text" placeholder="Buscar"/>
+        </div>
+
+        <!-- Client view tools -->
+        <div *ngIf="view == 'editor'" class="button go-back-button" (click)="goBack()"></div>
+        <button *ngIf="view == 'editor' && adding" style="margin-left:10px" class="light-blue" (click)="uploadNewItem()">Crear</button>
+        <button *ngIf="view == 'editor' && !adding" style="margin-left:10px" class="light-green" (click)="updateItem()">Guardar cambios</button>
+        <button *ngIf="view == 'editor' && !adding" style="margin-left:10px" class="red" (click)="deleteItem()">Eliminar</button>
+    </div>
+  
+    <div class="bottom-menu">
+
+        <custom-table *ngIf="view == 'table'" [columns]="columns" [rows]="rows" (rowRightClick)="rowRightClick($event)" (rowLeftClick)="rowLeftClick($event)"></custom-table>
+
+        <div *ngIf="view == 'editor'" class="item-view">
+
+            <div class="product-info">
+                <div class="title">Información General</div>
+                <div class="h-box-1">
+                    
+                    <table class="product-form">
+                        <tr>
+                            <td>Nombre:</td>
+                            <td><input type="text" placeholder="Nombre del cliente" [(ngModel)]="currentItemData.firstname"/></td>
+                        </tr>
+                        <tr>
+                            <td>Apellido:</td>
+                            <td><input type="text" placeholder="Apellido del cliente" [(ngModel)]="currentItemData.lastname"/></td>
+                        </tr>
+                        <tr>
+                            <td>Compañía:</td>
+                            <td><input type="text" placeholder="Compañia" [(ngModel)]="currentItemData.company"/></td>
+                        </tr>
+                        <tr>
+                            <td>RUT:</td>
+                            <td><input type="text" placeholder="Ej: 19.310.256-5" [(ngModel)]="currentItemData.rut"/></td>
+                        </tr>
+                        <tr>
+                            <td>Ciudad:</td>
+                            <td><input type="text" placeholder="Nombre de ciudad" [(ngModel)]="currentItemData.cityName"/></td>
+                        </tr>
+                        <tr>
+                            <td>Dirección:</td>
+                            <td><input type="text" placeholder="Calle y número" [(ngModel)]="currentItemData.address"/></td>
+                        </tr>
+                        <tr>
+                            <td>Comentario:</td>
+                            <td><textarea type="text" placeholder="Comentario adicional" [(ngModel)]="currentItemData.comment"></textarea></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="list-editor">
+                <div class="title">Teléfonos</div>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+
+                    <tbody *ngFor="let phone of currentItemData.phones;let index = index;">
+                        <tr>
+                            <td>
+                                <div *ngIf="phone.default" class="button star-button"></div>
+                                <div *ngIf="!phone.default" class="button star-button-disabled" (click)="setDefaultPhone(index)"></div>
+                            </td>
+                            <td><input placeholder="Teléfono" type="tel" [(ngModel)]="currentItemData.phones[index].phone"/></td>
+                            <td><div *ngIf="currentItemData.phones.length > 1" (click)="deletePhone(index)" class="button delete-button"></div></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+                
+                <div class="button mini-add-button" (click)="addPhone()"></div>
+            </div>
+
+            <div class="list-editor">
+                <div class="title">Emails</div>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+
+                    <tbody *ngFor="let email of currentItemData.emails;let index = index;">
+                        <tr>
+                            <td>
+                                <div *ngIf="email.default" class="button star-button"></div>
+                                <div *ngIf="!email.default" class="button star-button-disabled" (click)="setDefaultEmail(index)"></div>
+                            </td>
+                            <td><input placeholder="Email" type="email" [(ngModel)]="currentItemData.emails[index].email"/></td>
+                            <td><div *ngIf="currentItemData.emails.length > 1" (click)="deleteEmail(index)" class="button delete-button"></div></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+                
+                <div class="button mini-add-button" (click)="addEmail()"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+  

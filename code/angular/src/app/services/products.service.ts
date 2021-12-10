@@ -9,7 +9,7 @@ import { SessionService } from './session.service';
 })
 export class ProductsService {
 
-  constructor(private http : HttpClient,private session : SessionService ) { }
+  constructor(private http : HttpClient,private session : SessionService) { }
 
   public createProduct(formData : any) : Observable<any>
   {

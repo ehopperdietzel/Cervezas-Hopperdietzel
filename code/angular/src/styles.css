@@ -42,7 +42,7 @@ html,body
   font-family: sf-pro-display;
   font-size:var(--font-size-default);
 }
-input[type="text"],input[type="password"]
+input[type="text"],input[type="password"],input[type="tel"],input[type="email"],textarea
 {
   border-radius:var(--border-roundness);
   border:0.5px solid var(--light-gray);

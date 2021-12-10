@@ -23,6 +23,10 @@ class CreatePricesTable extends Migration
         Schema::table('prices', function(Blueprint $table) {
             $table->foreign('product')->references('id')->on('products');
         });
+
+        Schema::table('products', function(Blueprint $table) {
+            $table->foreign('defaultPrice')->references('id')->on('prices');
+        });
     }
 
     /**

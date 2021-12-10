@@ -16,5 +16,10 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('/products', 'App\Http\Controllers\ProductsController@createProduct');
     Route::get('/products', 'App\Http\Controllers\ProductsController@getProducts');
     Route::delete('/products/{id}', 'App\Http\Controllers\ProductsController@deleteProduct');
+
+    Route::post('/clients', 'App\Http\Controllers\ClientsController@createClient');
+    Route::get('/clients', 'App\Http\Controllers\ClientsController@getClients');
+    Route::patch('/clients', 'App\Http\Controllers\ClientsController@updateClient');
+    Route::delete('/clients/{id}', 'App\Http\Controllers\ClientsController@deleteClient');
 });
 

@@ -20,6 +20,7 @@ import { ContextMenuService } from './services/context-menu.service';
 import { LoadingIndicatorService } from './services/loading-indicator.service';
 import { AlertModalComponent } from './components/modals/alert-modal/alert-modal.component';
 import { ProductsSectionComponent } from './views/products-section/products-section.component';
+import { ClientsSectionComponent } from './views/clients-section/clients-section.component';
 
 
 @NgModule(
@@ -35,6 +36,7 @@ import { ProductsSectionComponent } from './views/products-section/products-sect
     ContextMenuComponent,
     AlertModalComponent,
     ProductsSectionComponent,
+    ClientsSectionComponent,
   ],
   imports: [
     BrowserModule,

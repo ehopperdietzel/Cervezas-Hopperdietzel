@@ -1,0 +1,127 @@
+.add-user-button
+{
+  margin-left: 12px;
+}
+.go-back-button
+{
+    margin-left: 12px;
+}
+.list-editor input
+{
+    margin-left: 0;
+    width:256px;
+}
+.star-button,.star-button-disabled
+{
+    margin: 10px;
+}
+.item-view
+{
+    padding:30px;
+    padding-bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+.item-view .title
+{
+    font-size: 26px;
+    color:var(--dark-gray);
+    border-bottom: 1px solid var(--light-gray);
+    padding-bottom: 10px;
+}
+.product-image
+{
+    margin-right: 15px;
+    border:4px solid #FFF;
+    box-shadow: 0px 0px 2px 0px;
+    border-radius: 2px;
+}
+.h-box-1
+{
+    margin-top:20px;
+    margin-bottom:20px;
+    display: flex;
+}
+.color-picker
+{
+    width:194px;
+    height:34px;
+}
+table
+{
+    font-weight: bold;
+    color:var(--dark-gray);
+}
+.list-editor table
+{
+    margin-top: 10px;
+}
+.mini-add-button
+{
+    margin-left: calc(50% - 14px);
+}
+.product-image
+{
+  height:128px;
+  width:128px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.product-image .image-buttons
+{
+  width:100%;
+  height:100%;
+  opacity:0;
+  display: flex;
+}
+.product-image .image-buttons:hover
+{
+    opacity:1;
+}
+.image-buttons .remove-button
+{
+    cursor:pointer;
+    background-image: url('../../../assets/img/icons/trash.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size:30px;
+    height:50%;
+    width:100%;
+    background-color: rgba(100,100,200,0.3);
+    opacity:0.8;
+}
+.image-buttons .remove-button:hover
+{
+    opacity:1;
+}
+.image-buttons .upload-button
+{
+    cursor:pointer;
+    background-image: url('../../../assets/img/icons/upload.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size:30px;
+    height:50%;
+    width:100%;
+    background-color: rgba(100,100,200,0.3);
+    opacity:0.8;
+}
+.image-buttons .upload-button:hover
+{
+    opacity:1;
+}
+.product-form input,.product-form textarea
+{
+    width: 256px;
+}
+.product-form textarea
+{
+    max-width: 256px;
+}
+.bottom-menu
+{
+    overflow: scroll;
+    height: calc(100vh - 80px);
+}

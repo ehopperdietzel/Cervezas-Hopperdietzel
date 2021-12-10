@@ -26,7 +26,6 @@ class CreateProductsTable extends Migration
 
         Schema::table('products', function(Blueprint $table) {
             $table->foreign('lastModificationUser')->references('id')->on('users');
-            //$table->foreign('defaultPrice')->references('id')->on('prices');
         });
     }
 

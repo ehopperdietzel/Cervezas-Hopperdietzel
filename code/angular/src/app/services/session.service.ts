@@ -15,6 +15,12 @@ export class SessionService
   public sections : any = 
   [
     {
+      name:"Clientes",
+      icon:"assets/img/icons/clients.png",
+      admin:false,
+      user:true
+    },
+    {
       name:"Productos",
       icon:"assets/img/icons/products.png",
       admin:false,
@@ -47,7 +53,7 @@ export class SessionService
       this.logout();
     else
     {
-      this.currentSection == section;
+      this.currentSection = section;
     }
   }
 
