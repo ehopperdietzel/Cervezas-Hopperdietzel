@@ -12,7 +12,7 @@ use DateTime;
 
 class Products extends Model
 {    
-    public $fillable = ['name','alias','color','image','defaultPrice','lastModificationTime','lastModificationUser'];
+    public $fillable = ['name','alias','color','image', 'stock','defaultPrice','lastModificationTime','lastModificationUser'];
     public $timestamps = false;
 
     public function getProducts()
@@ -38,6 +38,7 @@ class Products extends Model
             'name' => $request->name,
             'alias' => $request->alias,
             'color' => $request->color,
+            'stock' => $request->stock,
             'image' => $containsImage,
             'defaultPrice' => 0,
             'lastModificationTime' => date('Y-m-d H:i:s'),

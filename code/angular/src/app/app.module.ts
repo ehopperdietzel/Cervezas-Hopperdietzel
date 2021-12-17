@@ -21,6 +21,7 @@ import { LoadingIndicatorService } from './services/loading-indicator.service';
 import { AlertModalComponent } from './components/modals/alert-modal/alert-modal.component';
 import { ProductsSectionComponent } from './views/products-section/products-section.component';
 import { ClientsSectionComponent } from './views/clients-section/clients-section.component';
+import { StockSectionComponent } from './views/stock-section/stock-section.component';
 
 
 @NgModule(
@@ -37,6 +38,7 @@ import { ClientsSectionComponent } from './views/clients-section/clients-section
     AlertModalComponent,
     ProductsSectionComponent,
     ClientsSectionComponent,
+    StockSectionComponent,
   ],
   imports: [
     BrowserModule,

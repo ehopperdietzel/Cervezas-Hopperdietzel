@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('name',32);
             $table->string('alias',32);
             $table->string('color',7);
+            $table->integer('stock')->default(0);
             $table->boolean('image')->default(false);
             $table->unsignedBigInteger('defaultPrice')->nullable();
             $table->timestamp('lastModificationTime', $precision = 0);
@@ -27,6 +28,7 @@ class CreateProductsTable extends Migration
         Schema::table('products', function(Blueprint $table) {
             $table->foreign('lastModificationUser')->references('id')->on('users');
         });
+        
     }
 
     /**

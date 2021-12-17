@@ -11,6 +11,7 @@ export var environment =
   }
 };
 
+
 export var decode = function(input:string)
 {
     // Replace non-url compatible chars with base64 standard chars

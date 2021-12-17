@@ -19,6 +19,11 @@ export class ProductsSectionComponent implements OnInit {
       type:'text'
     },
     {
+      title:'Unidades disponibles',
+      key:'stock',
+      type:'text'
+    },
+    {
       title:'Alias',
       key:'aliasColor',
       type:'colorText'
@@ -149,6 +154,7 @@ export class ProductsSectionComponent implements OnInit {
       alias:"",
       color:"#000000",
       image:false,
+      stock:0,
       prices:
       [
         {
@@ -208,6 +214,7 @@ export class ProductsSectionComponent implements OnInit {
     formData.append("name", this.currentProductData.name);
     formData.append("alias", this.currentProductData.alias);
     formData.append("color", this.currentProductData.color);
+    formData.append("stock", this.currentProductData.stock);
     formData.append("prices", JSON.stringify(this.currentProductData.prices));
 
     if(this.currentProductData.image != false && this.imageChanged)

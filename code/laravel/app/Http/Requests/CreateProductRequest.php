@@ -13,6 +13,7 @@ class CreateProductRequest extends FormRequest
             'alias' => 'regex:/^[a-zA-Z0-9\s]+$/|required|max:32',
             'image' => [ 'nullable','image','mimes:jpg,png,jpeg' ],
             'color' => 'required',
+            'stock' => 'required',
             'prices' => 'required',
         ];
     }

@@ -1,0 +1,66 @@
+<div id="stock-section" class="section">
+
+    <div class="top-bar">
+
+        <!-- Table view tools -->
+        <div *ngIf="view == 'table'" class="button plus add-user-button" (click)="addItem()"></div>
+        <div *ngIf="view == 'table'" class="search-input">
+            <img src="assets/img/icons/search.png"/>
+            <input type="text" placeholder="Buscar"/>
+        </div>
+
+        <!-- Client view tools -->
+        <div *ngIf="view == 'editor'" class="button go-back-button" (click)="goBack()"></div>
+        <button *ngIf="view == 'editor' && adding" style="margin-left:10px" class="light-blue" (click)="uploadNewItem()">Registrar nueva tanda</button>
+        <button *ngIf="view == 'editor' && !adding" style="margin-left:10px" class="light-green" (click)="updateItem()">Guardar cambios</button>
+        <button *ngIf="view == 'editor' && !adding" style="margin-left:10px" class="red" (click)="deleteItem()">Eliminar</button>
+    </div>
+  
+    <div class="bottom-menu">
+
+        <custom-table *ngIf="view == 'table'" [columns]="columns" [rows]="rows" (rowRightClick)="rowRightClick($event)" (rowLeftClick)="rowLeftClick($event)"></custom-table>
+
+        <div *ngIf="view == 'editor'" class="item-view">
+
+            <div class="product-info">
+                <div class="title">Tanda de Producción</div>
+                <div class="h-box-1">
+                    
+                    <table class="product-form">
+                        <tr>
+                            <td>Nº Tanda:</td>
+                            <td><input type="number" placeholder="Nº de tanda" [(ngModel)]="currentItemData.batchNumber"/></td>
+                        </tr>
+                        <tr>
+                            <td>Producto:</td>
+                            <td>
+                                <div class="select">
+                                    <select placeholder="Producto" [(ngModel)]="currentItemData.product">
+                                        <option *ngFor="let product of products" value="{{product.id}}">{{product.name}}</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Unidades Producidas:</td>
+                            <td><input type="number" placeholder="Unidades producidas" [(ngModel)]="currentItemData.quantity"/></td>
+                        </tr>
+                        <tr>
+                            <td>Fecha de inicio:</td>
+                            <td><input type="datetime-local" [(ngModel)]="currentItemData.beginDate"/></td>
+                        </tr>
+                        <tr>
+                            <td>Fecha de término:</td>
+                            <td><input type="datetime-local" [(ngModel)]="currentItemData.endDate"/></td>
+                        </tr>
+                        <tr>
+                            <td>Comentario:</td>
+                            <td><textarea type="text" placeholder="Comentario adicional" [(ngModel)]="currentItemData.comment" maxlength="256"></textarea></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  

@@ -15,6 +15,24 @@ export class SessionService
   public sections : any = 
   [
     {
+      name:"Ventas",
+      icon:"assets/img/icons/sales.png",
+      admin:false,
+      user:true
+    },
+    {
+      name:"Logística",
+      icon:"assets/img/icons/ships.png",
+      admin:false,
+      user:true
+    },
+    {
+      name:"Fabricación",
+      icon:"assets/img/icons/stock.png",
+      admin:false,
+      user:true
+    },
+    {
       name:"Clientes",
       icon:"assets/img/icons/clients.png",
       admin:false,
@@ -23,6 +41,12 @@ export class SessionService
     {
       name:"Productos",
       icon:"assets/img/icons/products.png",
+      admin:false,
+      user:true
+    },
+    {
+      name:"Respaldos",
+      icon:"assets/img/icons/backups.png",
       admin:false,
       user:true
     },
@@ -98,6 +122,20 @@ export class SessionService
     this.userId = -1;
     this.username = "";
     localStorage.removeItem("token");
+  }
+
+  public strToDate(str:string) : Date
+  {
+    var date = str.split('-')
+
+    var year = parseInt(date[0]);
+    var month = parseInt(date[1]);
+    var day = parseInt(date[2].split(' ')[0]);
+
+    var hour = parseInt(date[2].split(' ')[1].split(':')[0]);
+    var min = parseInt(date[2].split(' ')[1].split(':')[1]);
+
+    return new Date(year, month, day, hour, min);
   }
 
 }
