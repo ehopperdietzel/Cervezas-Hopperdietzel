@@ -136,7 +136,7 @@ button.warning
   color:var(--light-green);
 }
 /* Clases */
-.pointer,button,.button
+.pointer,button,.button,.no-select
 {
   cursor:pointer;
   -webkit-user-select: none; /* Safari */
@@ -305,4 +305,15 @@ button.full-width
   width:100%;
   height:calc(100% - 60px);
   position:relative;
+}
+
+/* TOPBAR */
+.topbar-add-button,.go-back-button
+{
+  margin-left: 12px;
+}
+.list-editor input
+{
+    margin-left: 0;
+    width:256px;
 }

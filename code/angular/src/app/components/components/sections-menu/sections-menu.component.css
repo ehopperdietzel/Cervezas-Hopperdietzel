@@ -4,6 +4,7 @@
   height:100vh;
   min-width:220px;
   background:#333333;
+  overflow-y:auto;
 }
 
 #left-menu .top

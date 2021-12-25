@@ -9,6 +9,8 @@ use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\LoginRequest;
 
+use App\Models\ColumnsSettings;
+
 class Users extends Model
 {
 
@@ -41,7 +43,11 @@ class Users extends Model
             'password' => $request->password,
             'status' => $request->status
         );
-        return Users::create($userData)->id;
+
+        $userId = Users::create($userData)->id;
+
+        ColumnsSettings::createDefaultColumns($userId);
+        return $userId;
     }
 
     public function getUsersWithPassword(GetUsersRequest $request)

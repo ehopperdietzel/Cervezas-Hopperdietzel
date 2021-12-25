@@ -1,11 +1,3 @@
-.add-user-button
-{
-  margin-left: 12px;
-}
-.go-back-button
-{
-    margin-left: 12px;
-}
 .list-editor input
 {
     margin-left: 0;
@@ -125,7 +117,6 @@ table
     overflow: scroll;
     height: calc(100vh - 80px);
 }
-
 .select
 {
     margin-left:6px;

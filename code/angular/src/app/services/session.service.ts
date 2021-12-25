@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment, decode } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -12,6 +13,8 @@ export class SessionService
   private userId : number = -1;
   private username : string = "";
 
+  public columnsSettings : any = {};
+
   public sections : any = 
   [
     {
@@ -20,12 +23,14 @@ export class SessionService
       admin:false,
       user:true
     },
+    /*
     {
       name:"Logística",
       icon:"assets/img/icons/ships.png",
       admin:false,
       user:true
     },
+    */
     {
       name:"Fabricación",
       icon:"assets/img/icons/stock.png",
@@ -97,8 +102,34 @@ export class SessionService
       if(this.userId == 0)
         this.currentSection = "Usuarios";
       else
-        this.currentSection = "Productos";
+      {
+        var options = 
+        {
+          headers:{Authorization: 'Bearer ' + this.getToken()}
+        };
+        this.http.get<any>(environment.apiURL + '/columnsSettings', options).subscribe(
+          res => 
+          {
+            this.columnsSettings = res;
+            console.log(res);
+            this.currentSection = "Ventas";
+          },
+          err => 
+          {
+            this.logout();
+            console.log(err);
+          });
+      }
     }
+  }
+
+  public updateColumnSetting(formData : any) : Observable<any>
+  {
+    var options = 
+    {
+      headers:{Authorization: 'Bearer ' + this.getToken()}
+    };
+    return this.http.patch<any>(environment.apiURL + '/columnsSettings', formData, options);
   }
 
   public getUserId() : number

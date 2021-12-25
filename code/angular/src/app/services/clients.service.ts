@@ -11,11 +11,15 @@ export class ClientsService {
 
   constructor(private http : HttpClient,private session : SessionService) { }
 
-  public getClients() : Observable<any>
+  public getClients(extraOptions : any) : Observable<any>
   {
     var options = 
     {
-      headers:{Authorization: 'Bearer ' + this.session.getToken()}
+      headers:{Authorization: 'Bearer ' + this.session.getToken()},
+      params:
+      {
+        options:JSON.stringify(extraOptions)
+      }
     };
     return this.http.get<any>(environment.apiURL + '/clients', options);
   }

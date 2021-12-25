@@ -27,9 +27,12 @@ Route::group(['middleware' => ['cors']], function () {
     Route::patch('/batches', 'App\Http\Controllers\BatchesController@updateBatch');
     Route::delete('/batches/{id}', 'App\Http\Controllers\BatchesController@deleteBatch');
 
-    Route::post('/sales', 'App\Http\Controllers\BatchesController@createSale');
-    Route::get('/sales', 'App\Http\Controllers\BatchesController@getSales');
-    Route::patch('/sales', 'App\Http\Controllers\BatchesController@updateSale');
-    Route::delete('/sales/{id}', 'App\Http\Controllers\BatchesController@deleteSale');
+    Route::post('/sales', 'App\Http\Controllers\SalesController@createSale');
+    Route::get('/sales', 'App\Http\Controllers\SalesController@getSales');
+    Route::patch('/sales', 'App\Http\Controllers\SalesController@updateSale');
+    Route::delete('/sales/{id}', 'App\Http\Controllers\SalesController@deleteSale');
+
+    Route::get('/columnsSettings', 'App\Http\Controllers\ColumnsSettingsController@getColumnsSettings');
+    Route::patch('/columnsSettings', 'App\Http\Controllers\ColumnsSettingsController@updateColumnSetting');
 });
 

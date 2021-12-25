@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+use App\Http\Requests\GetClientsRequest;
 use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Http\Requests\DeleteClientRequest;
@@ -16,8 +17,39 @@ class Clients extends Model
     public $fillable = ['firstname','lastname','company','rut','comment','address','city','defaultPhone','defaultEmail','status','lastModificationTime','lastModificationUser'];
     public $timestamps = false;
 
-    public function getClients()
+    public function getClients(GetClientsRequest $request)
     {
+        // Check for extra options
+        if($request->has('options'))
+        {
+            $options = json_decode($request->options);
+
+            if(isset($options->query))
+            {
+                $words = preg_split('/\s+/', $options->query);
+
+                $res = Clients::query()
+                ->join('cities', 'clients.city', '=', 'cities.id');
+
+                foreach($words as $word)
+                {
+                    $res = $res->orWhere('lastname', 'LIKE', '%'.$word.'%')
+                    ->orWhere('firstname', 'LIKE', '%'.$word.'%')
+                    ->orWhere('company', 'LIKE', '%'.$word.'%')
+                    ->orWhere('comment', 'LIKE', '%'.$word.'%')
+                    ->orWhere('rut', 'LIKE', '%'.$word.'%') 
+                    ->orWhere('cities.city', 'LIKE', '%'.$word.'%');
+                }
+                
+                $res = $res->select('clients.*','cities.city as cityName')
+                ->take(15)
+                ->get()
+                ->toArray();
+
+                return $res;
+            }
+        }
+
         $clients = DB::table('clients')
             ->join('users', 'clients.lastModificationUser', '=', 'users.id')
             ->join('cities', 'clients.city', '=', 'cities.id')

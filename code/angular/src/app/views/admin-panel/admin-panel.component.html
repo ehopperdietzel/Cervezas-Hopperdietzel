@@ -4,11 +4,10 @@
   
     <div id="right-menu">
       <users-section *ngIf="sessionService.currentSection == 'Usuarios'"></users-section>
+      <sales-section *ngIf="sessionService.currentSection == 'Ventas'"></sales-section>
       <stock-section *ngIf="sessionService.currentSection == 'Fabricación'"></stock-section>
       <clients-section *ngIf="sessionService.currentSection == 'Clientes'"></clients-section>
       <products-section *ngIf="sessionService.currentSection == 'Productos'"></products-section>
     </div>
-  
     
-  
   </div>

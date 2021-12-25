@@ -18,7 +18,7 @@ class ClientsController extends Controller
 
     public function getClients(GetClientsRequest $request)
     {
-        return json_encode(Clients::getClients());
+        return json_encode(Clients::getClients($request));
     }
 
     public function createClient(CreateClientRequest $request)

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientsService } from 'src/app/services/clients.service';
 import { LoadingIndicatorService } from 'src/app/services/loading-indicator.service';
+import { SessionService } from 'src/app/services/session.service';
 
 @Component({
   selector: 'clients-section',
@@ -9,11 +10,12 @@ import { LoadingIndicatorService } from 'src/app/services/loading-indicator.serv
 })
 export class ClientsSectionComponent implements OnInit {
 
-  constructor(public clientsService : ClientsService,public loadingIndicatorService : LoadingIndicatorService) { }
+  constructor(public clientsService : ClientsService,public loadingIndicatorService : LoadingIndicatorService, public sessionService : SessionService) { }
 
   ngOnInit(): void 
   {
     this.getAllClients();
+    this.columns = this.sessionService.columnsSettings['clients'];
   }
 
   // View mode
@@ -88,7 +90,7 @@ export class ClientsSectionComponent implements OnInit {
   {
     this.loadingIndicatorService.loadingStates["getAllClients"] = true;
 
-    this.clientsService.getClients().subscribe(
+    this.clientsService.getClients({}).subscribe(
       res => 
       {
         this.loadingIndicatorService.loadingStates["getAllClients"] = false;

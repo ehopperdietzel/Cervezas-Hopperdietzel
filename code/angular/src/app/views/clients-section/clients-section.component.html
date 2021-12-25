@@ -18,7 +18,7 @@
   
     <div class="bottom-menu">
 
-        <custom-table *ngIf="view == 'table'" [columns]="columns" [rows]="rows" (rowRightClick)="rowRightClick($event)" (rowLeftClick)="rowLeftClick($event)"></custom-table>
+        <custom-table *ngIf="view == 'table'" [columns]="columns" [rows]="rows" (rowRightClick)="rowRightClick($event)" (rowLeftClick)="rowLeftClick($event)" ></custom-table>
 
         <div *ngIf="view == 'editor'" class="item-view">
 

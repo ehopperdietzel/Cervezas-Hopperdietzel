@@ -15,6 +15,22 @@ class CreateSalesTable extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('client');
+            $table->unsignedBigInteger('documentType');
+            $table->unsignedBigInteger('documentNumber');
+            $table->boolean('documentIsSigned')->default(false);
+
+            $table->boolean('paid')->default(false);
+            $table->boolean('delivered')->default(false);
+
+            $table->timestamp('deliverDate', $precision = 0)->useCurrent();
+            $table->timestamp('paidDate', $precision = 0)->useCurrent();
+
+            $table->string('comment',256);
+
+            $table->timestamp('lastModificationTime', $precision = 0)->useCurrent();
+            $table->unsignedBigInteger('lastModificationUser');
         });
     }
 

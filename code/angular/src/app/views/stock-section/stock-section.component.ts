@@ -19,6 +19,7 @@ export class StockSectionComponent implements OnInit {
   {
     this.getAllProducts();
     this.getAllBatches();
+    this.columns = this.sessionService.columnsSettings['batches'];
   }
 
   // View mode

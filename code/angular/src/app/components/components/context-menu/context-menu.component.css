@@ -8,6 +8,7 @@
     min-width:200px;
     max-width: 300px;
     overflow: hidden;
+    color:#666;
 }
 
 #contextMenu .item
@@ -31,7 +32,7 @@
     width:10px;
     height:10px;
     margin-top: 3px;
-    margin-right: 7px;
+    margin-right: 10px;
     margin-left: 5px;
     background-position: center;
     background-size: contain;

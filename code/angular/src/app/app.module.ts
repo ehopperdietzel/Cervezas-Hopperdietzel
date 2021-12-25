@@ -22,6 +22,9 @@ import { AlertModalComponent } from './components/modals/alert-modal/alert-modal
 import { ProductsSectionComponent } from './views/products-section/products-section.component';
 import { ClientsSectionComponent } from './views/clients-section/clients-section.component';
 import { StockSectionComponent } from './views/stock-section/stock-section.component';
+import { SalesSectionComponent } from './views/sales-section/sales-section.component';
+import { ShipmentSectionComponent } from './views/shipment-section/shipment-section.component';
+import { SuggestionsInputComponent } from './components/components/suggestions-input/suggestions-input.component';
 
 
 @NgModule(
@@ -39,6 +42,9 @@ import { StockSectionComponent } from './views/stock-section/stock-section.compo
     ProductsSectionComponent,
     ClientsSectionComponent,
     StockSectionComponent,
+    SalesSectionComponent,
+    ShipmentSectionComponent,
+    SuggestionsInputComponent,
   ],
   imports: [
     BrowserModule,

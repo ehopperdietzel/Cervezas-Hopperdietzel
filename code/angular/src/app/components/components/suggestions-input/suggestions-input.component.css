@@ -1,0 +1,35 @@
+.suggestions-input
+{
+    position: relative;
+    width:100%;
+}
+.suggestions-input input
+{
+    position: relative;
+    width:100%;
+}
+.suggestions-list
+{
+    z-index: 10;
+    background:white;
+    box-shadow: 0px 0px 2px 0px #444;
+    border-radius: 3px;
+    position: absolute;
+    top:40px;
+    left:0px;
+    font-weight:normal;
+    width:100%;
+    max-height: 300px;
+    overflow:auto;
+}
+.suggestions-list div
+{
+    cursor:pointer;
+    padding:5px;
+    border-bottom:solid 0.5px gray;
+}
+.suggestions-list div:hover
+{
+    background-color: var(--light-blue);
+    color:white;
+}

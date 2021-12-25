@@ -1,10 +1,14 @@
-<table id="user-table" class="table" cellspacing="0" cellpadding="0">
-    <thead align="left">
-        <th *ngFor="let column of columns" [width]="column.width">{{column.title}}</th>
-    </thead>
-    <tbody>
-        <tr *ngFor="let row of rows" (contextmenu)="onRightClick($event,row)" (click)="onLeftClick($event,row)">
-            <td *ngFor="let column of columns" [width]="column.width">
+<div class="table">
+    <div id="header" class="head">
+        <div class="th no-select" *ngFor="let column of columns;let index = index" [style.width]="column.width + 'px'" [style.display]="column.visible ? 'block' : 'none'" (contextmenu)="columnRightClick($event,index)">
+            {{column.title}} 
+            <span draggable="true" class="handle" (dragstart)="columnDragStart($event,index)" (drag)="columnDrag($event,index)" (dragend)="columnDragEnd($event,index)"></span>
+        </div>
+        <div class="th no-select" style="width:2000px"></div>
+    </div>
+    <div class="body">
+        <div class="row" *ngFor="let row of rows" (contextmenu)="onRightClick($event,row)" (click)="onLeftClick($event,row)">
+            <div class="column" *ngFor="let column of columns" [style.width]="column.width + 'px'" [style.display]="column.visible ? 'block' : 'none'">
                 
                 <!-- Texto -->
                 <span *ngIf="column.type == 'text'" [ngStyle]="column.style">{{row[column.key]}}</span>
@@ -16,13 +20,22 @@
                 <b *ngIf="column.type == 'statusText' && row[column.key] == 0" class="text red">Desactivado</b>
                 <b *ngIf="column.type == 'statusText' && row[column.key] == 1" class="text green">Activado</b>
 
+                <!-- Pagado (fecha) -->
+                <b *ngIf="column.type == 'paid' && row.paid == false" class="text red">PENDIENTE</b>
+                <b *ngIf="column.type == 'paid' && row.paid == true" class="text green">{{row.paidDate}}</b>
+
+                <!-- Entregado (fecha) -->
+                <b *ngIf="column.type == 'delivered' && row.delivered == false" class="text red">PENDIENTE</b>
+                <b *ngIf="column.type == 'delivered' && row.delivered == true" class="text green">{{row.deliverDate}}</b>
+
                 <!-- Dinero -->
                 <b *ngIf="column.type == 'money'" class="text green">{{moneyFormat(row[column.key])}}</b>
 
                 <!-- Image -->
                 <div *ngIf="column.type == 'image'" class="image" [style.background-image]="'url(\'assets/img/products/0.jpg\')'"></div>
       
-            </td>
-        </tr>
-    </tbody>
-</table>
+            </div>
+            <div class="column" style="width:2000px"></div>
+        </div>
+    </div>
+</div>

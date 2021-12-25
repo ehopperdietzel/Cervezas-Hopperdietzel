@@ -2,15 +2,98 @@
 .table
 {
   position:relative;
-  width:100%;
-  height:100%;
+  width:calc(100vw - 220px);
+  height:calc(100vh - 60px);
+  overflow-y: hidden;
+  overflow-x: auto;
 }
-.table th,.table td
+.table .head
 {
+  display:flex;
+  overflow-x: hidden;
+  width: max-content;
+}
+.table .body
+{
+  position:relative;
+  height:calc(100% - 28px);
+  overflow-y:auto;
+  overflow-x: hidden;
+  width: max-content;
+}
+.table .th
+{
+  position: relative;
+  color:var(--gray);
+  font-size: 14px;
+  border-right: solid 0.5px var(--light-gray);
+  border-bottom: solid 0.5px var(--light-gray);
+  font-weight: bold;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  padding:6px;
+  padding-left: 8px;
+}
+.table .handle
+{
+  position:absolute;
+  width:7px;
+  height: 100%;
+  top:0;
+  right:0;
+  cursor: col-resize;
+}
+.table .column
+{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  padding:8px;
+  padding-left: 6px;
+
+  font-size:13px;
+  color:var(--dark-gray);
+}
+.table .th:first-child,.table .column:first-child
+{
+  padding-left: 40px;
+}
+.table .row
+{
+  width:100%;
+  display: flex;
+  cursor: pointer;
+}
+.table .row:hover
+{
+  opacity: 0.85;
+}
+.table .row:active
+{
+  opacity: 1;
+}
+.table .row:nth-child(even) .column
+{
+  background: #F7F7F7;
+}
+#header .th:nth-last-child(2)
+{
+  border-right: none;
+}
+
+/*
+.table .th,.table .column
+{
+  padding:4px;
   padding-left: 8px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: inline-block;
 }
 .table th:first-child,.table td:first-child
 {
@@ -21,7 +104,6 @@
   color:var(--gray);
   height:28px;
   font-size: 14px;
-  border-bottom: solid 0.5px var(--light-gray);
   border-right: solid 0.5px var(--light-gray);
 }
 .table td
@@ -64,4 +146,4 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-}
+}*/

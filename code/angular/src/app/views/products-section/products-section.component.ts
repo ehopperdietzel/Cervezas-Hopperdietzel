@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingIndicatorService } from 'src/app/services/loading-indicator.service';
 import { ProductsService } from 'src/app/services/products.service';
+import { SessionService } from 'src/app/services/session.service';
 
 @Component({
   selector: 'products-section',
@@ -9,7 +10,7 @@ import { ProductsService } from 'src/app/services/products.service';
 })
 export class ProductsSectionComponent implements OnInit {
 
-  constructor(public productsService : ProductsService,public loadingIndicatorService : LoadingIndicatorService) 
+  constructor(public productsService : ProductsService,public loadingIndicatorService : LoadingIndicatorService, public sessionService : SessionService) 
   {}
 
   public columns : Array<any> = [
@@ -72,6 +73,7 @@ export class ProductsSectionComponent implements OnInit {
   ngOnInit() : void 
   {
     this.getProducts();
+    this.columns = this.sessionService.columnsSettings['products'];
   }
 
   public rowLeftClick(event : any) : void

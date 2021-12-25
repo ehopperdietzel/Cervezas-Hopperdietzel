@@ -18,28 +18,34 @@ export class UsersSectionComponent implements OnInit {
     {
       title:'Nombre',
       key:'firstname',
-      type:'text'
+      type:'text',
+      width:120
     },
     {
       title:'Apellido',
       key:'lastname',
-      type:'text'
+      type:'text',
+      width:120
     },
     {
       title:'Email',
       key:'email',
-      type:'text'
+      type:'text',
+      width:150
     },
     {
       title:'Contraseña',
       key:'password',
-      type:'text'
+      type:'text',
+      width:100
     },
     {
       title:'Estado',
       key:'status',
-      type:'statusText'
+      type:'statusText',
+      width:150
     }];
+    
   public rows : Array<any> = [];
 
   constructor(private modals:ModalService, 

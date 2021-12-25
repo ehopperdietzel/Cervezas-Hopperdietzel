@@ -1,0 +1,122 @@
+<div id="sales-section" class="section">
+
+    <div class="top-bar">
+
+        <!-- Table view tools -->
+        <div *ngIf="view == 'table'" class="button plus topbar-add-button" (click)="addItem()"></div>
+        <div *ngIf="view == 'table'" class="search-input">
+            <img src="assets/img/icons/search.png"/>
+            <input type="text" placeholder="Buscar"/>
+        </div>
+
+        <!-- Client view tools -->
+        <div *ngIf="view == 'editor'" class="button go-back-button" (click)="goBack()"></div>
+        <button *ngIf="view == 'editor' && adding" style="margin-left:10px" class="light-blue" (click)="uploadNewItem()">Guardar Venta</button>
+        <button *ngIf="view == 'editor' && !adding" style="margin-left:10px" class="light-green" (click)="updateItem()">Guardar cambios</button>
+        <button *ngIf="view == 'editor' && !adding" style="margin-left:10px" class="red" (click)="deleteItem()">Eliminar</button>
+    </div>
+  
+    <div class="bottom-menu">
+
+        <custom-table *ngIf="view == 'table'" [columns]="columns" [rows]="rows" (rowRightClick)="rowRightClick($event)" (rowLeftClick)="rowLeftClick($event)"></custom-table>
+
+        <div *ngIf="view == 'editor'" class="item-view">
+
+             <!-- Información general de la venta -->
+            <div class="product-info">
+                <div class="title">Información General Venta</div>
+                <div class="h-box-1">
+                    
+                    <table class="sale-form">
+                        <tr>
+                            <td>Cliente:</td>
+                            <td>
+                                <suggestions-input [options]="clientSuggestionsOptions" (onKeyUp)="onClientSuggestionInputChange($event)" (itemSelected)="clientSelected($event)"></suggestions-input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Documento:</td>
+                            <td>
+                                <div class="select">
+                                    <select class="in" placeholder="Documento" [(ngModel)]="currentItemData.documentType">
+                                        <option *ngFor="let document of documentTypes" value="{{document.id}}">{{document.name}}</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pagado:</td>
+                            <td>
+                                <input type="checkbox" [(ngModel)]="currentItemData.paid"/>
+                                <input *ngIf="currentItemData.paid" type="datetime-local" [(ngModel)]="currentItemData.paidDate"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Entregado:</td>
+                            <td>
+                                <input type="checkbox" [(ngModel)]="currentItemData.delivered"/>
+                                <input *ngIf="currentItemData.delivered" type="datetime-local" [(ngModel)]="currentItemData.deliverDate"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Comentario:</td>
+                            <td><textarea class="in" type="text" placeholder="Comentario adicional" [(ngModel)]="currentItemData.comment" maxlength="256"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>Monto Total:</td>
+                            <td>${{getSaleTotalCost()}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Lista de productos -->
+            <div class="products-list">
+                <div class="title">Productos</div>
+                <table>
+                    <tr>
+                        <th align="left">Producto</th>
+                        <th align="left">Precio</th>
+                        <th align="left">Unidades</th>
+                        <th align="left">Disponible</th>
+                        <th></th>
+                    </tr>
+    
+                    <tbody *ngFor="let product of currentItemData.products;let index = index;">
+                        <tr>
+                            <td>
+                                <!-- Select producto -->
+                                <div class="select product">
+                                    <select [(ngModel)]="currentItemData.products[index].product">
+                                        <option *ngFor="let prods of products" value="{{prods.id}}">{{prods.name}}</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <!-- Select precio-->
+                                <div class="select priceType">
+                                    <select [(ngModel)]="currentItemData.products[index].priceType">
+                                        <option *ngFor="let priceType of getProductById(currentItemData.products[index].product).prices" value="{{priceType.id}}">{{priceType.name}}</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <input class="quantity" type="number" [(ngModel)]="currentItemData.products[index].quantity"/>
+                            </td>
+                            <td align="center">
+                                {{getStockDifference(currentItemData.products[index].product)}}
+                            </td>
+                            <td><div *ngIf="currentItemData.products.length > 1" (click)="removeProduct(index)" class="button delete-button"></div></td>
+                        </tr>
+                    </tbody>
+    
+                </table>
+                
+                <div class="button mini-add-button" (click)="addProduct()"></div>
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+  
