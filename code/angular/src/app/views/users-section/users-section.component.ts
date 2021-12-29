@@ -19,33 +19,38 @@ export class UsersSectionComponent implements OnInit {
       title:'Nombre',
       key:'firstname',
       type:'text',
-      width:120
+      width:120,
+      visible:true
     },
     {
       title:'Apellido',
       key:'lastname',
       type:'text',
-      width:120
+      width:120,
+      visible:true
     },
     {
       title:'Email',
       key:'email',
       type:'text',
-      width:150
+      width:150,
+      visible:true
     },
     {
       title:'Contraseña',
       key:'password',
       type:'text',
-      width:100
+      width:100,
+      visible:true
     },
     {
       title:'Estado',
       key:'status',
       type:'statusText',
-      width:150
+      width:150,
+      visible:true
     }];
-    
+
   public rows : Array<any> = [];
 
   constructor(private modals:ModalService, 
@@ -66,16 +71,16 @@ export class UsersSectionComponent implements OnInit {
   {
     this.loadingIndicatorService.loadingStates["getUsersWithPassword"] = true;
     this.usersService.getUsers(query).subscribe(
-      res => 
-      {
-        this.loadingIndicatorService.loadingStates["getUsersWithPassword"] = false;
-        this.rows = res;
-      },
-      err => 
-      {
-        this.loadingIndicatorService.loadingStates["getUsersWithPassword"] = false;
-        console.log(err);
-      });
+    res => 
+    {
+      this.loadingIndicatorService.loadingStates["getUsersWithPassword"] = false;
+      this.rows = res;
+    },
+    err => 
+    {
+      this.loadingIndicatorService.loadingStates["getUsersWithPassword"] = false;
+      console.log(err);
+    });
   }
 
   public searchUsers(event : any)

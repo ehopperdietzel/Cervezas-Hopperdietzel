@@ -27,6 +27,7 @@ export class SalesSectionComponent implements OnInit {
 
   // Adding indicator
   public adding : boolean = false;
+  public editing : boolean = false;
 
   public documentTypes : any =
   [
@@ -46,6 +47,7 @@ export class SalesSectionComponent implements OnInit {
 
   public currentItemData : any = {};
   public currentItemDataUnmodified : any = {};
+  public currentItemDataBackup : any = {};
 
   public products : any = [];
 
@@ -146,6 +148,7 @@ export class SalesSectionComponent implements OnInit {
       {
         this.loadingIndicatorService.loadingStates["getAllProducts"] = false;       
         this.products = res;
+        console.log(res);
       },
       err => 
       {
@@ -159,7 +162,11 @@ export class SalesSectionComponent implements OnInit {
   {
     this.adding = false;
     this.currentItemData = Object.assign({}, event.row);
+    this.currentItemData.deliverDate = this.sessionService.phpDateToJavascript(this.currentItemData.deliverDate);
+    this.currentItemData.paidDate = this.sessionService.phpDateToJavascript(this.currentItemData.paidDate);
+    this.clientSuggestionsOptions.value = this.currentItemData.clientFirstname + " " + this.currentItemData.clientLastname + " / " + this.currentItemData.cityName + " / " + this.currentItemData.address;
     this.view = 'editor';
+    this.editing = false;
   }
 
   public goBack() : void 
@@ -202,16 +209,28 @@ export class SalesSectionComponent implements OnInit {
     for(var i = 0; i < this.currentItemData.products.length; i++)
     {
       var product = this.getProductById(this.currentItemData.products[i].product);
-      var price = this.getPriceById(product.prices,this.currentItemData.products[i].priceType).price;
+      var price = this.getPriceById(this.currentItemData.products[i].priceType).price;
       total += price*this.currentItemData.products[i].quantity;
     }
 
     return total;
   }
 
+
   // Show create item view
   public addItem() : void 
   {
+    this.clientSuggestionsOptions  =
+    {
+      placeholder:"Cliente",
+      value:"",
+      styles:
+      {
+        width:"256px"
+      },
+      suggestions:[]
+    }
+
     this.currentItemData = 
     {
       documentType:0,
@@ -230,6 +249,7 @@ export class SalesSectionComponent implements OnInit {
       ]
     }
     this.adding = true;
+    this.editing = true;
     this.view = 'editor';
   }
 
@@ -255,13 +275,16 @@ export class SalesSectionComponent implements OnInit {
     }
   }
 
-  public getPriceById(priceObject:any,priceTypeId:number) : any
+  public getPriceById(priceTypeId:number) : any
   {
-    for(var i = 0; i < priceObject.length; i++)
+    for(var i = 0; i < this.products.length; i++)
     {
-      if(priceObject[i].id == priceTypeId)
+      for(var j = 0; j < this.products[i].prices.length;j++)
       {
-        return priceObject[i];
+        if(this.products[i].prices[j].id == priceTypeId)
+        {
+          return this.products[i].prices[j];
+        }
       }
     }
   }
@@ -304,9 +327,11 @@ export class SalesSectionComponent implements OnInit {
       res => 
       {
         this.loadingIndicatorService.loadingStates["createSale"] = false;
+        this.getAllProducts();
         this.getAllSales();
-        this.view = 'table';
+        this.editing = false;
         this.adding = false;
+        this.currentItemData = res;
         console.log(res);
       },
       err => 
@@ -317,50 +342,165 @@ export class SalesSectionComponent implements OnInit {
     
   }
 
+  public editItem() : void 
+  {
+    this.currentItemDataBackup = JSON.parse(JSON.stringify(this.currentItemData));
+    console.log(this.currentItemDataBackup);
+    this.editing = true;
+  }
+
+  public cancelEdit() : void 
+  {
+    this.currentItemData = this.currentItemDataBackup;
+    this.editing = false;
+  }
+
+  public detectChanges() : any
+  {
+    var changes : any = {sale:this.currentItemDataBackup.id,count:0,productChanges:[],productDeletions:[],productAditions:[]};
+    var keys = ['client','comment','deliverDate','paidDate','delivered','paid','documentType'];
+
+    // General info
+    for(var i = 0; i < keys.length; i++)
+    {
+      if(this.currentItemDataBackup[keys[i]] != this.currentItemData[keys[i]])
+      {
+        changes[keys[i]] = this.currentItemData[keys[i]];
+        changes.count += 1;
+      }
+    }
+
+    // Additions
+    for(var i = 0; i < this.currentItemData.products.length; i++)
+    {
+      if( !('id' in this.currentItemData.products[i]) )
+      {
+        changes.productAditions.push(
+        {
+          quantity:this.currentItemData.products[i].quantity,
+          priceType:this.currentItemData.products[i].priceType,
+          product:this.currentItemData.products[i].product
+        });
+        changes.count += 1;
+      }
+    }
+
+    // Deletions
+    for(var i = 0; i < this.currentItemDataBackup.products.length; i++)
+    {
+      var exists = false;
+
+      for(var j = 0; j < this.currentItemData.products.length; j++)
+      {
+        if(this.currentItemDataBackup.products[i].id === this.currentItemData.products[j].id)
+        {
+          exists = true;
+          break;
+        }
+      }
+
+      if(!exists)
+      {
+        changes.productDeletions.push(this.currentItemDataBackup.products[i].id);
+        changes.count += 1;
+      }
+        
+      
+    }
+      
+    // Products changes
+    keys = ['quantity','priceType','product'];
+
+    for(var i = 0; i < this.currentItemDataBackup.products.length; i++)
+    {
+      for(var j = 0; j < this.currentItemData.products.length; j++)
+      {
+        if(this.currentItemDataBackup.products[i].id === this.currentItemData.products[j].id)
+        {
+          for(var k = 0; k < keys.length; k++)
+          {
+            if(this.currentItemDataBackup.products[i][keys[k]] != this.currentItemData.products[j][keys[k]])
+            {
+              changes.productChanges.push(
+              {
+                id:this.currentItemDataBackup.products[i].id,
+                quantity:this.currentItemData.products[j].quantity,
+                priceType:this.currentItemData.products[j].priceType,
+                product:this.currentItemData.products[j].product
+              });
+              changes.count += 1;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    return changes;
+  }
+
+  public moneyFormat(x : number) : string 
+  {
+    if(x == undefined)
+      return "$0";
+
+    return "$"+x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
   // Update item
   public updateItem()
   {
-    /*
-    this.loadingIndicatorService.loadingStates["updateBatch"] = true;
+    
+    this.loadingIndicatorService.loadingStates["updateSale"] = true;
 
-    var data = Object.assign({}, this.currentItemData);
+    var changes = this.detectChanges();
+    
+    if('deliverDate' in changes)
+      changes.deliverDate = changes.deliverDate.replace('T',' ');
+
+    if('paidDate' in changes)
+      changes.paidDate = changes.paidDate.replace('T',' ');
+
+    var data = JSON.stringify(changes);
    
-    this.stockService.updateBatch(data).subscribe(
+    this.salesService.updateSale(data).subscribe(
     res => 
     {
-      this.loadingIndicatorService.loadingStates["updateBatch"] = false;
-      this.getAllBatches();
-      this.view = 'table';
+      this.getAllProducts();
+      this.getAllSales();
+      this.editing = false;
+      this.loadingIndicatorService.loadingStates["updateSale"] = false;
+      this.currentItemData = res;
       console.log(res);
     },
     err => 
     {
-      this.loadingIndicatorService.loadingStates["updateBatch"] = false;
-      //this.usersModal.errorMessage = err.error.message;
+      this.loadingIndicatorService.loadingStates["updateSale"] = false;
       console.log(err);
     });
-    */
+    
   }
 
   // DELETE Item
   public deleteItem()
   {
-    /*
-    this.loadingIndicatorService.loadingStates["deleteBatch"] = true;
 
-    this.stockService.deleteBatch(this.currentItemData.id).subscribe(
-      res => 
-      {
-        this.loadingIndicatorService.loadingStates["deleteBatch"] = false;
-        this.getAllBatches();
-        this.view = 'table';
-        console.log(res);
-      },
-      err => 
-      {
-        this.loadingIndicatorService.loadingStates["deleteBatch"] = false;
-        console.log(err);
-      });
-    */
+    this.loadingIndicatorService.loadingStates["deleteSale"] = true;
+
+    this.salesService.deleteSale(this.currentItemData.id).subscribe(
+    res => 
+    {
+      this.loadingIndicatorService.loadingStates["deleteSale"] = false;
+      this.getAllProducts();
+      this.getAllSales();
+      this.editing = false;
+      this.view = 'table';
+      console.log(res);
+    },
+    err => 
+    {
+      this.loadingIndicatorService.loadingStates["deleteSale"] = false;
+      console.log(err);
+    });
   }
 }

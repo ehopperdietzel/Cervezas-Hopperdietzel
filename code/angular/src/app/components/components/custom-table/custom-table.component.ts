@@ -22,6 +22,32 @@ export class CustomTableComponent implements OnInit {
   {
    
   }
+  public documentTypes : any =
+  [
+    {
+      id:0,
+      name:"Factura"
+    },
+    {
+      id:1,
+      name:"Boleta"
+    },
+    {
+      id:2,
+      name:"Guía"
+    }
+  ];
+
+  public getProductQuantity(products:any,productId:number) : number
+  {
+    var total = 0;
+    for(var i = 0; i < products.length; i++)
+    {
+      if(products[i].product == productId)
+        total += products[i].quantity;
+    }
+    return total;
+  }
 
   public columnInitSize : number = 0;
   public initPointerX : number = 0;

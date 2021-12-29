@@ -24,7 +24,18 @@ class SalesController extends Controller
 
     public function createSale(CreateSaleRequest $request)
     {
-        $saleId = Sales::createSale($request);
-        return response()->json(['id' => $saleId],200);
+        return json_encode(Sales::createSale($request));
+    }
+
+    public function updateSale(UpdateSaleRequest $request)
+    {
+        return json_encode(Sales::updateSale($request));
+    }
+
+    public function deleteSale(DeleteSaleRequest $request)
+    {
+
+        Sales::deleteSale($request);
+        return response()->json(['status' => "success"],200);
     }
 }

@@ -58,6 +58,12 @@
   font-size:13px;
   color:var(--dark-gray);
 }
+.table .column div, .table .column b, .table .column span
+{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .table .th:first-child,.table .column:first-child
 {
   padding-left: 40px;

@@ -17,8 +17,23 @@ class ColumnsSettings extends Model
 
     public function getColumnsSettings(GetColumnsSettingsRequest $request)
     {
+        
+        $sales = DB::table('columns_settings')->where('user',$request->get('JWTID'))->where('section',0)->orderBy('order')->get()->toArray();
+
+        for($i = 0; $i < count($sales);$i++)
+        {
+            if($sales[$i]->type == 'productQuantity')
+            {
+                $sales[$i]->key = intval($sales[$i]->key);
+                $product = DB::table('products')->where('id',$sales[$i]->key)->get()->toArray()[0];
+                $sales[$i]->title = $product->alias;
+                $sales[$i]->name = $product->name;
+                $sales[$i]->color = $product->color;
+            }
+        }
+    
         return [
-            'sales'=>DB::table('columns_settings')->where('user',$request->get('JWTID'))->where('section',0)->orderBy('order')->get()->toArray(),
+            'sales'=>$sales,
             'batches'=>DB::table('columns_settings')->where('user',$request->get('JWTID'))->where('section',1)->orderBy('order')->get()->toArray(),
             'products'=>DB::table('columns_settings')->where('user',$request->get('JWTID'))->where('section',2)->orderBy('order')->get()->toArray(),
             'clients'=>DB::table('columns_settings')->where('user',$request->get('JWTID'))->where('section',3)->orderBy('order')->get()->toArray(),
@@ -31,11 +46,18 @@ class ColumnsSettings extends Model
         
         $default = [
             // Sales
-            ['user'=>$userId,'section'=>0,'title'=>'Cliente',               'type'=>'text',         'key'=>'clientName',            'order'=>0,'visible'=>true,'width'=>200],
-            ['user'=>$userId,'section'=>0,'title'=>'Pagado',                'type'=>'paid',         'key'=>'paid',                  'order'=>1,'visible'=>true,'width'=>130],
-            ['user'=>$userId,'section'=>0,'title'=>'Entregado',             'type'=>'delivered',    'key'=>'delivered',             'order'=>2,'visible'=>true,'width'=>130],
-            ['user'=>$userId,'section'=>0,'title'=>'Última Modificación',   'type'=>'text',         'key'=>'lastModificationTime',  'order'=>3,'visible'=>true,'width'=>130],
-            ['user'=>$userId,'section'=>0,'title'=>'Modificado por',        'type'=>'text',         'key'=>'modifiedBy',            'order'=>4,'visible'=>true,'width'=>150],
+            ['user'=>$userId,'section'=>0,'title'=>'Cliente',               'type'=>'text',         'key'=>'clientName',            'order'=>0,'visible'=>true, 'width'=>150],
+            ['user'=>$userId,'section'=>0,'title'=>'Monto',                 'type'=>'money',        'key'=>'cost',                  'order'=>1,'visible'=>true, 'width'=>100],
+            ['user'=>$userId,'section'=>0,'title'=>'Documento',             'type'=>'documentType', 'key'=>'documentType',          'order'=>2,'visible'=>true, 'width'=>100],
+            ['user'=>$userId,'section'=>0,'title'=>'Nº Documento',          'type'=>'document',     'key'=>'documentNumber',        'order'=>3,'visible'=>true, 'width'=>120],
+            ['user'=>$userId,'section'=>0,'title'=>'Pagado',                'type'=>'paid',         'key'=>'paid',                  'order'=>4,'visible'=>true, 'width'=>130],
+            ['user'=>$userId,'section'=>0,'title'=>'Entregado',             'type'=>'delivered',    'key'=>'delivered',             'order'=>5,'visible'=>true, 'width'=>130],
+            ['user'=>$userId,'section'=>0,'title'=>'Ciudad',                'type'=>'text',         'key'=>'cityName',              'order'=>6,'visible'=>true, 'width'=>150],
+            ['user'=>$userId,'section'=>0,'title'=>'Dirección',             'type'=>'text',         'key'=>'address',               'order'=>7,'visible'=>true, 'width'=>150],
+            ['user'=>$userId,'section'=>0,'title'=>'Teléfono',              'type'=>'text',         'key'=>'phone',                 'order'=>8,'visible'=>true, 'width'=>150],
+            ['user'=>$userId,'section'=>0,'title'=>'Email',                 'type'=>'text',         'key'=>'email',                 'order'=>9,'visible'=>true, 'width'=>150],
+            ['user'=>$userId,'section'=>0,'title'=>'Última Modificación',   'type'=>'text',         'key'=>'lastModificationTime',  'order'=>10,'visible'=>false,'width'=>130],
+            ['user'=>$userId,'section'=>0,'title'=>'Modificado por',        'type'=>'text',         'key'=>'modifiedBy',            'order'=>11,'visible'=>false,'width'=>150],
 
             // Batches
             ['user'=>$userId,'section'=>1,'title'=>'Nº Tanda',              'type'=>'text',         'key'=>'batchNumber',           'order'=>0,'visible'=>true,'width'=>50],

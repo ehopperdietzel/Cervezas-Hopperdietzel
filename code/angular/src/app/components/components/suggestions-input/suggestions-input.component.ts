@@ -8,15 +8,19 @@ import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Outpu
 export class SuggestionsInputComponent implements OnInit {
 
   @Input() public options : any = {};
-  @Input() public selected : string = "";
   @Output() public itemSelected: EventEmitter<any> = new EventEmitter();
   @Output() public onKeyUp: EventEmitter<any> = new EventEmitter();
   
-  @HostListener('document:click', ['$event'])
+  public valueBackup : string =  "";
+  public hasFocus : boolean = false;
+
+  @HostListener('document:mousedown', ['$event'])
   clickout(event : any) 
   {
-    if(!this.eRef.nativeElement.contains(event.target)) 
+    if(this.hasFocus && !this.eRef.nativeElement.contains(event.target)) 
     {
+      this.hasFocus = false;
+      this.options.value = this.valueBackup;
       this.options.suggestions = [];
     } 
   }

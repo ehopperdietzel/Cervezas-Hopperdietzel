@@ -10,7 +10,10 @@ import { SessionService } from 'src/app/services/session.service';
 })
 export class ProductsSectionComponent implements OnInit {
 
-  constructor(public productsService : ProductsService,public loadingIndicatorService : LoadingIndicatorService, public sessionService : SessionService) 
+  constructor(
+    public productsService : ProductsService,
+    public loadingIndicatorService : LoadingIndicatorService, 
+    public sessionService : SessionService) 
   {}
 
   public columns : Array<any> = [
@@ -44,18 +47,24 @@ export class ProductsSectionComponent implements OnInit {
       key:'modifiedBy',
       type:'text'
     }];
+  
+  // View mode
+  public view : string = "table";
+
+  // Adding indicator
+  public adding : boolean = false;
+  public editing : boolean = true;
 
   public rows : Array<any> = [];
 
   public displayingProduct : boolean = false;
-  public adding : boolean = false;
   public imageChanged : boolean = false;
 
   public products : any = [];
 
   public imageData : any;
 
-  public currentProductData : any = {
+  public currentItemData : any = {
     name:"",
     alias:"",
     color:"#000000",
@@ -69,6 +78,7 @@ export class ProductsSectionComponent implements OnInit {
       }
     ]
   }
+  public currentItemDataBackup : any = {};
 
   ngOnInit() : void 
   {
@@ -79,34 +89,38 @@ export class ProductsSectionComponent implements OnInit {
   public rowLeftClick(event : any) : void
   {
     event.preventDefault();
-    this.currentProductData = event.row;
-    this.displayingProduct = true;
+    this.currentItemData = event.row;
+    this.view = 'editor';
+    this.adding = false;
+    this.editing = true;
+    this.editItem();
   }
 
   public removePrice(index:number) : void 
   {
-    var isDefault = this.currentProductData.prices[index].default;
-    this.currentProductData.prices.splice(index,1);
+    var isDefault = this.currentItemData.prices[index].default;
+    this.currentItemData.prices.splice(index,1);
     if(isDefault)
-      this.currentProductData.prices[0].default = true;
+      this.currentItemData.prices[0].default = true;
   }
 
-  public deleteProduct()
+  public deleteItem()
   {
     this.loadingIndicatorService.loadingStates["deleteProduct"] = true;
 
-    this.productsService.deleteProduct(this.currentProductData.id).subscribe(
+    this.productsService.deleteProduct(this.currentItemData.id).subscribe(
       res => 
       {
         this.loadingIndicatorService.loadingStates["deleteProduct"] = false;
         this.getProducts();
-        this.displayingProduct = false;
+        this.view = 'table';
+        this.adding = false;
+        this.editing = true;
         console.log(res);
       },
       err => 
       {
         this.loadingIndicatorService.loadingStates["deleteProduct"] = false;
-        //this.usersModal.errorMessage = err.error.message;
         console.log(err);
       });
   }
@@ -119,7 +133,7 @@ export class ProductsSectionComponent implements OnInit {
       res => 
       {
         this.loadingIndicatorService.loadingStates["getProducts"] = false;
-        //this.usersModal.close();
+
         for(var i = 0; i < res.length; i++)
         {
           res[i].modifiedBy = res[i].userFirstname + " " + res[i].userLastname;
@@ -142,15 +156,107 @@ export class ProductsSectionComponent implements OnInit {
       err => 
       {
         this.loadingIndicatorService.loadingStates["getProducts"] = false;
-        //this.usersModal.errorMessage = err.error.message;
         console.log(err);
       });
+  }
+
+  public editItem() : void 
+  {
+    this.currentItemDataBackup = JSON.parse(JSON.stringify(this.currentItemData));
+    console.log(this.currentItemDataBackup);
+    this.editing = true;
+  }
+
+  public cancelEdit() : void 
+  {
+    this.currentItemData = this.currentItemDataBackup;
+    this.editing = true;
+  }
+
+  public detectChanges() : any
+  {
+    var changes : any = {id:this.currentItemDataBackup.id,count:0,priceChanges:[],priceDeletions:[],priceAditions:[]};
+    var keys = ['name','alias','stock','color','image'];
+
+    if(this.currentItemData.prices.length == 1 && this.currentItemData.prices[0].name == "")
+      return changes;
+
+    // General changes
+    for(var i = 0; i < keys.length; i++)
+    {
+      if(this.currentItemDataBackup[keys[i]] != this.currentItemData[keys[i]])
+      {
+        changes[keys[i]] = this.currentItemData[keys[i]];
+        changes.count+=1;
+      }
+    }
+
+    // Aditions
+    for(var j = 0; j < this.currentItemData.prices.length; j++)
+    {
+      if(!('id' in this.currentItemData.prices[j]))
+      {
+        changes.priceAditions.push(this.currentItemData.prices[j]);
+        changes.count+=1;
+      }
+    }
+
+    // Deletions
+    for(var i = 0; i < this.currentItemDataBackup.prices.length; i++)
+    {
+      var exists = false;
+
+      for(var j = 0; j < this.currentItemData.prices.length; j++)
+      {
+        if(this.currentItemDataBackup.prices[i].id === this.currentItemData.prices[j].id)
+        {
+          exists = true;
+          break;
+        }
+      }
+
+      if(!exists)
+      {
+        changes.priceDeletions.push(this.currentItemDataBackup.prices[i].id);
+        changes.count += 1;
+      }
+    }
+
+    keys = ['name','price','default'];
+
+    // Price changes
+    for(var i = 0; i < this.currentItemDataBackup.prices.length; i++)
+    {
+      for(var j = 0; j < this.currentItemData.prices.length; j++)
+      {
+        if(this.currentItemDataBackup.prices[i].id === this.currentItemData.prices[j].id)
+        {
+          for(var k = 0; k < keys.length; k++)
+          {
+            if(this.currentItemDataBackup.prices[i][keys[k]] != this.currentItemData.prices[j][keys[k]])
+            {
+              changes.priceChanges.push(
+              {
+                id:this.currentItemData.prices[j].id,
+                name:this.currentItemData.prices[j].name,
+                price:this.currentItemData.prices[j].price,
+                default:this.currentItemData.prices[j].default
+              });
+              changes.count+=1;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    return changes;
   }
 
   public addProduct() : void
   {
     this.imageChanged = false;
-    this.currentProductData =
+    this.currentItemData =
     {
       name:"",
       alias:"",
@@ -167,12 +273,13 @@ export class ProductsSectionComponent implements OnInit {
       ]
     }
     this.adding = true;
-    this.displayingProduct = true;
+    this.editing = true;
+    this.view = 'editor';
   }
 
   public addPrice() : void 
   {
-    this.currentProductData.prices.push(
+    this.currentItemData.prices.push(
     {
       name:"",
       price:0,
@@ -180,67 +287,117 @@ export class ProductsSectionComponent implements OnInit {
     })
   }
 
-  public getCurrentProductDataImage() : string
+  public getcurrentItemDataImage() : string
   {
-    if(!this.currentProductData.image && !this.imageChanged)
+    if(!this.currentItemData.image && !this.imageChanged)
       return "assets/img/icons/no-image.jpg";
     else if(this.imageChanged)
-      return this.currentProductData.image;
+      return this.currentItemData.image;
     else
-      return "../../../assets/img/products/"+this.currentProductData.id+".jpg";
+      return "../../../assets/img/products/"+this.currentItemData.id+".jpg?" + new Date().getTime();
   }
 
   public removeImage() : void
   {
-    this.currentProductData.image = false;
+    this.currentItemData.image = false;
     this.imageChanged = false;
   }
 
   public setDefaultPrice(index : number) : void 
   {
-    for(let i = 0; i < this.currentProductData.prices.length; i++)
+    for(let i = 0; i < this.currentItemData.prices.length; i++)
     {
-      this.currentProductData.prices[i].default = false;
+      this.currentItemData.prices[i].default = false;
     }
 
-    this.currentProductData.prices[index].default = true;
+    this.currentItemData.prices[index].default = true;
 
   }
 
-  public uploadNewProduct() : void 
+  public updateItem() : void
+  {
+    // Create form data
+    const formData = new FormData(); 
+
+    var changes = this.detectChanges();
+            
+    // Store form name as "file" with file data
+    formData.append("changes", JSON.stringify(changes));
+
+    if(this.currentItemData.image != false && this.imageChanged)
+      formData.append("image", this.imageData,"image.jpg");
+
+    this.loadingIndicatorService.loadingStates["updateProduct"] = true;
+
+    this.productsService.updateProduct(formData).subscribe(
+    res => 
+    {
+      this.loadingIndicatorService.loadingStates["updateProduct"] = false;
+      this.getProducts();
+      this.view = 'table';
+      this.adding = false;
+      this.sessionService.getColumnSettings().subscribe(
+      res => 
+      {
+        this.sessionService.columnsSettings = res;
+      },
+      err => 
+      {
+        this.sessionService.logout();
+        console.log(err);
+      });
+    },
+    err => 
+    {
+      this.loadingIndicatorService.loadingStates["updateProduct"] = false;
+      console.log(err);
+    });
+  }
+
+  public uploadNewItem() : void 
   {
     // Create form data
     const formData = new FormData(); 
         
     // Store form name as "file" with file data
-    formData.append("name", this.currentProductData.name);
-    formData.append("alias", this.currentProductData.alias);
-    formData.append("color", this.currentProductData.color);
-    formData.append("stock", this.currentProductData.stock);
-    formData.append("prices", JSON.stringify(this.currentProductData.prices));
+    formData.append("name", this.currentItemData.name);
+    formData.append("alias", this.currentItemData.alias);
+    formData.append("color", this.currentItemData.color);
+    formData.append("stock", this.currentItemData.stock);
+    formData.append("prices", JSON.stringify(this.currentItemData.prices));
 
-    if(this.currentProductData.image != false && this.imageChanged)
+    if(this.currentItemData.image != false && this.imageChanged)
       formData.append("image", this.imageData,"image.jpg");
 
     this.loadingIndicatorService.loadingStates["createProduct"] = true;
 
     this.productsService.createProduct(formData).subscribe(
+    res => 
+    {
+      this.loadingIndicatorService.loadingStates["createProduct"] = false;
+      this.getProducts();
+      this.view = 'table';
+      this.adding = false;
+      this.editing = false;
+      this.loadingIndicatorService.loadingStates["updateProduct"] = false;
+      this.getProducts();
+      this.view = 'table';
+      this.adding = false;
+      this.sessionService.getColumnSettings().subscribe(
       res => 
       {
-        this.loadingIndicatorService.loadingStates["createProduct"] = false;
-        //this.usersModal.close();
-        this.getProducts();
-        this.displayingProduct = false;
-        this.adding = false;
-        
-        console.log(res);
+        this.sessionService.columnsSettings = res;
       },
       err => 
       {
-        this.loadingIndicatorService.loadingStates["createProduct"] = false;
-        //this.usersModal.errorMessage = err.error.message;
-        console.log(err);
+        this.sessionService.logout();
       });
+    },
+    err => 
+    {
+      this.loadingIndicatorService.loadingStates["createProduct"] = false;
+      console.log(err);
+    });
   }
 
   public previewImage(files : any) : void 
@@ -259,14 +416,16 @@ export class ProductsSectionComponent implements OnInit {
     var reader = new FileReader();
     reader.readAsDataURL(files[0]); 
     reader.onload = (_event : any) => { 
-      this.currentProductData.image = _event.target.result; 
+      this.currentItemData.image = _event.target.result; 
     }
     this.imageChanged = true;
   }
 
   public goBack() : void 
   {
-    this.displayingProduct = false;
+    this.view = 'table';
+    this.editing = false;
+    this.adding = false;
   }
 
   public rowRightClick(event : any) : void

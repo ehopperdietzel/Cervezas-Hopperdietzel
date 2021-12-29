@@ -3,33 +3,35 @@
     <div class="top-bar">
 
         <!-- Table view tools -->
-        <div *ngIf="!displayingProduct" class="button plus topbar-add-button" (click)="addProduct()"></div>
-        <div *ngIf="!displayingProduct" class="search-input">
+        <div *ngIf="view == 'table'" class="button plus topbar-add-button" (click)="addProduct()"></div>
+        <div *ngIf="view == 'table'" class="search-input">
             <img src="assets/img/icons/search.png"/>
             <input type="text" placeholder="Buscar"/>
         </div>
 
         <!-- Product view tools -->
-        <div *ngIf="displayingProduct" class="button go-back-button" (click)="goBack()"></div>
-        <button *ngIf="displayingProduct && adding" style="margin-left:10px" class="light-blue" (click)="uploadNewProduct()">Crear</button>
-        <button *ngIf="displayingProduct && !adding" style="margin-left:10px" class="light-green" (click)="uploadNewProduct()">Guardar</button>
-        <button *ngIf="displayingProduct && !adding" style="margin-left:10px" class="red" (click)="deleteProduct()">Eliminar</button>
+        <div *ngIf="view == 'editor'" class="button go-back-button" (click)="goBack()"></div>
+        <!--<button *ngIf="view == 'editor' && !adding && editing" style="margin-left:10px" class="gray" (click)="cancelEdit()">Cancelar</button>-->
+        <!--<button *ngIf="view == 'editor' && !editing" style="margin-left:10px" class="light-green" (click)="editItem()">Editar</button>-->
+        <button *ngIf="view == 'editor' && adding && editing" style="margin-left:10px" class="light-blue" (click)="uploadNewItem()">Guardar Producto</button>
+        <button *ngIf="view == 'editor' && !adding && editing" style="margin-left:10px" class="light-green" (click)="updateItem()" [disabled]="detectChanges().count == 0">Guardar cambios</button>
+        <button *ngIf="view == 'editor' && !adding && editing" style="margin-left:10px" class="red" (click)="deleteItem()">Eliminar</button>
     </div>
   
     <div class="bottom-menu">
 
-        <custom-table *ngIf="!displayingProduct" [columns]="columns" [rows]="rows" (rowRightClick)="rowRightClick($event)" (rowLeftClick)="rowLeftClick($event)"></custom-table>
+        <custom-table *ngIf="view == 'table'" [columns]="columns" [rows]="rows" (rowRightClick)="rowRightClick($event)" (rowLeftClick)="rowLeftClick($event)"></custom-table>
 
-        <div *ngIf="displayingProduct" class="product-view">
+        <div *ngIf="view == 'editor'" class="product-view">
 
             <div class="product-info">
                 <div class="title">Información General</div>
                 <div class="h-box-1">
 
                     <!-- Imagen -->
-                    <div class="product-image" [ngStyle]="{ 'background-image': 'url('+getCurrentProductDataImage()+')'}">
+                    <div class="product-image" [ngStyle]="{ 'background-image': 'url('+getcurrentItemDataImage()+')'}">
                         <div class="image-buttons">
-                            <div *ngIf="currentProductData.image || imageChanged" class="remove-button" (click)="removeImage()"></div>
+                            <div *ngIf="currentItemData.image || imageChanged" class="remove-button" (click)="removeImage()"></div>
                             <div class="upload-button" (click)="imagePicker.click()"></div>
                         </div>
                     </div>
@@ -37,19 +39,19 @@
                     <table class="product-form">
                         <tr>
                             <td>Nombre:</td>
-                            <td><input type="text" placeholder="Nombre del producto" [(ngModel)]="currentProductData.name"/></td>
+                            <td><input type="text" placeholder="Nombre del producto" [(ngModel)]="currentItemData.name"/></td>
                         </tr>
                         <tr>
                             <td>Alias:</td>
-                            <td><input type="text" placeholder="Nombre abreviado" [(ngModel)]="currentProductData.alias"/></td>
+                            <td><input type="text" placeholder="Nombre abreviado" [(ngModel)]="currentItemData.alias"/></td>
                         </tr>
                         <tr>
                             <td>Color:</td>
-                            <td><input type="color" class="color-picker" [(ngModel)]="currentProductData.color"/></td>
+                            <td><input type="color" class="color-picker" [(ngModel)]="currentItemData.color"/></td>
                         </tr>
                         <tr>
                             <td>Unidades disponibles:</td>
-                            <td><input type="number" [(ngModel)]="currentProductData.stock"/></td>
+                            <td><input type="number" [(ngModel)]="currentItemData.stock"/></td>
                         </tr>
                     </table>
                 </div>
@@ -65,16 +67,18 @@
                         <th></th>
                     </tr>
 
-                    <tbody *ngFor="let price of currentProductData.prices;let index = index;">
+                    <tbody *ngFor="let price of currentItemData.prices;let index = index;">
                         <tr>
-
                             <td>
                                 <div *ngIf="price.default" class="button star-button"></div>
                                 <div *ngIf="!price.default" class="button star-button-disabled" (click)="setDefaultPrice(index)"></div>
                             </td>
-                            <td><input placeholder="Nombre descriptivo del precio" style="width:220px" type="text" [(ngModel)]="currentProductData.prices[index].name"/></td>
-                            <td><input placeholder="Precio en CLP" style="width:100px" type="text" [(ngModel)]="currentProductData.prices[index].price"/></td>
-                            <td><div *ngIf="currentProductData.prices.length > 1" (click)="removePrice(index)" class="button delete-button"></div></td>
+                            <td><input placeholder="Nombre descriptivo del precio" style="width:220px" type="text" [(ngModel)]="currentItemData.prices[index].name"/></td>
+                            <td>
+                                <input *ngIf="!price.inUse" placeholder="Precio en CLP" style="width:100px" type="text" [(ngModel)]="currentItemData.prices[index].price"/>
+                                <span *ngIf="price.inUse">{{sessionService.moneyFormat(currentItemData.prices[index].price)}}<i style="font-weight:normal;">(Usado en ventas sin concretar)</i></span>
+                            </td>
+                            <td><div *ngIf="currentItemData.prices.length > 1 && !price.inUse" (click)="removePrice(index)" class="button delete-button"></div></td>
                         </tr>
                     </tbody>
 

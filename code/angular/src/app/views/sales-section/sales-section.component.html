@@ -11,9 +11,12 @@
 
         <!-- Client view tools -->
         <div *ngIf="view == 'editor'" class="button go-back-button" (click)="goBack()"></div>
-        <button *ngIf="view == 'editor' && adding" style="margin-left:10px" class="light-blue" (click)="uploadNewItem()">Guardar Venta</button>
-        <button *ngIf="view == 'editor' && !adding" style="margin-left:10px" class="light-green" (click)="updateItem()">Guardar cambios</button>
-        <button *ngIf="view == 'editor' && !adding" style="margin-left:10px" class="red" (click)="deleteItem()">Eliminar</button>
+        <button *ngIf="view == 'editor' && !adding && editing" style="margin-left:10px" class="gray" (click)="cancelEdit()">Cancelar</button>
+        <button *ngIf="view == 'editor' && !editing" style="margin-left:10px" class="light-green" (click)="editItem()">Editar</button>
+        <button *ngIf="view == 'editor' && !editing" style="margin-left:10px" class="light-blue">Generar {{documentTypes[currentItemData.documentType].name}}</button>
+        <button *ngIf="view == 'editor' && adding && editing" style="margin-left:10px" class="light-blue" (click)="uploadNewItem()">Guardar Venta</button>
+        <button *ngIf="view == 'editor' && !adding && editing" style="margin-left:10px" class="light-green" (click)="updateItem()" [disabled]="detectChanges().count == 0">Guardar cambios</button>
+        <button *ngIf="view == 'editor' && !adding && editing" style="margin-left:10px" class="red" (click)="deleteItem()">Eliminar</button>
     </div>
   
     <div class="bottom-menu">
@@ -24,95 +27,110 @@
 
              <!-- Información general de la venta -->
             <div class="product-info">
-                <div class="title">Información General Venta</div>
+                <div class="title">Información Venta</div>
                 <div class="h-box-1">
                     
                     <table class="sale-form">
                         <tr>
-                            <td>Cliente:</td>
+                            <td class="fieldTitle">Cliente:</td>
                             <td>
-                                <suggestions-input [options]="clientSuggestionsOptions" (onKeyUp)="onClientSuggestionInputChange($event)" (itemSelected)="clientSelected($event)"></suggestions-input>
+                                <suggestions-input *ngIf="editing" [options]="clientSuggestionsOptions" (onKeyUp)="onClientSuggestionInputChange($event)" (itemSelected)="clientSelected($event)"></suggestions-input>
+                                <span *ngIf="!editing">{{currentItemData.clientFirstname}} {{currentItemData.clientLastname}} / {{currentItemData.cityName}}</span>
                             </td>
                         </tr>
                         <tr>
-                            <td>Documento:</td>
+                            <td class="fieldTitle">Documento:</td>
                             <td>
-                                <div class="select">
+                                <div *ngIf="editing" class="select">
                                     <select class="in" placeholder="Documento" [(ngModel)]="currentItemData.documentType">
                                         <option *ngFor="let document of documentTypes" value="{{document.id}}">{{document.name}}</option>
                                     </select>
                                 </div>
+
+                                <span *ngIf="!editing">{{documentTypes[currentItemData.documentType].name}}</span>
                             </td>
                         </tr>
                         <tr>
-                            <td>Pagado:</td>
+                            <td class="fieldTitle">Pagado:</td>
                             <td>
-                                <input type="checkbox" [(ngModel)]="currentItemData.paid"/>
-                                <input *ngIf="currentItemData.paid" type="datetime-local" [(ngModel)]="currentItemData.paidDate"/>
+                                <input *ngIf="editing" type="checkbox" [(ngModel)]="currentItemData.paid"/>
+                                <input *ngIf="editing && currentItemData.paid" type="datetime-local" [(ngModel)]="currentItemData.paidDate"/>
+                                <span class="text green" *ngIf="!editing && currentItemData.paid">{{currentItemData.paidDate.split('T')[0]}}</span>
+                                <span class="text red" *ngIf="!editing && !currentItemData.paid">Pendiente</span>
                             </td>
                         </tr>
                         <tr>
-                            <td>Entregado:</td>
+                            <td class="fieldTitle">Entregado:</td>
                             <td>
-                                <input type="checkbox" [(ngModel)]="currentItemData.delivered"/>
-                                <input *ngIf="currentItemData.delivered" type="datetime-local" [(ngModel)]="currentItemData.deliverDate"/>
+                                <input *ngIf="editing" type="checkbox" [(ngModel)]="currentItemData.delivered"/>
+                                <input *ngIf="editing && currentItemData.delivered" type="datetime-local" [(ngModel)]="currentItemData.deliverDate"/>
+                                <span class="text green" *ngIf="!editing && currentItemData.delivered">{{currentItemData.deliverDate.split('T')[0]}}</span>
+                                <span class="text red" *ngIf="!editing && !currentItemData.delivered">Pendiente</span>
                             </td>
                         </tr>
                         <tr>
-                            <td>Comentario:</td>
-                            <td><textarea class="in" type="text" placeholder="Comentario adicional" [(ngModel)]="currentItemData.comment" maxlength="256"></textarea></td>
+                            <td class="fieldTitle">Comentario:</td>
+                            <td>
+                                <textarea *ngIf="editing" class="in" type="text" placeholder="Comentario adicional" [(ngModel)]="currentItemData.comment" maxlength="256"></textarea>
+                                <span *ngIf="!editing">{{currentItemData.comment}}</span>
+                            </td>
                         </tr>
                         <tr>
-                            <td>Monto Total:</td>
-                            <td>${{getSaleTotalCost()}}</td>
+                            <td class="fieldTitle">Monto Total:</td>
+                            <td class="text green">{{moneyFormat(getSaleTotalCost())}}</td>
                         </tr>
                     </table>
                 </div>
             </div>
 
             <!-- Lista de productos -->
-            <div class="products-list">
+            <div [ngClass]="{'products-list-editing':editing,'products-list':!editing}">
                 <div class="title">Productos</div>
                 <table>
                     <tr>
                         <th align="left">Producto</th>
-                        <th align="left">Precio</th>
+                        <th align="left">Tipo de Precio </th>
                         <th align="left">Unidades</th>
-                        <th align="left">Disponible</th>
-                        <th></th>
+                        <th *ngIf="editing" align="left">Disponible</th>
+                        <th *ngIf="editing"></th>
                     </tr>
     
                     <tbody *ngFor="let product of currentItemData.products;let index = index;">
                         <tr>
                             <td>
                                 <!-- Select producto -->
-                                <div class="select product">
-                                    <select [(ngModel)]="currentItemData.products[index].product">
-                                        <option *ngFor="let prods of products" value="{{prods.id}}">{{prods.name}}</option>
+                                <div *ngIf="editing" class="select product">
+                                    <select [(ngModel)]="currentItemData.products[index].product" (change)="currentItemData.products[index].priceType = getProductById(product.product).prices[0].id">
+                                        <option *ngFor="let prods of products" [ngValue]="prods.id">{{prods.name}} ({{prods.alias}})</option>
                                     </select>
                                 </div>
+
+                                <span *ngIf="!editing" [style.color]="getProductById(product.product).color">{{getProductById(product.product).name}} ({{getProductById(product.product).alias}}) </span>
                             </td>
                             <td>
                                 <!-- Select precio-->
-                                <div class="select priceType">
+                                <div *ngIf="editing" class="select priceType">
                                     <select [(ngModel)]="currentItemData.products[index].priceType">
-                                        <option *ngFor="let priceType of getProductById(currentItemData.products[index].product).prices" value="{{priceType.id}}">{{priceType.name}}</option>
+                                        <option *ngFor="let priceType of getProductById(product.product).prices" [ngValue]="priceType.id">{{priceType.name}} ({{moneyFormat(priceType.price)}} c/u)</option>
                                     </select>
                                 </div>
-                            </td>
-                            <td>
-                                <input class="quantity" type="number" [(ngModel)]="currentItemData.products[index].quantity"/>
+
+                                <span *ngIf="!editing">{{getPriceById(product.priceType).name}} ({{moneyFormat(getPriceById(product.priceType).price)}} c/u)</span>
                             </td>
                             <td align="center">
+                                <input *ngIf="editing" class="quantity" type="number" min="1" [(ngModel)]="currentItemData.products[index].quantity"/>
+                                <span *ngIf="!editing">{{product.quantity}}</span>
+                            </td>
+                            <td *ngIf="editing" align="center">
                                 {{getStockDifference(currentItemData.products[index].product)}}
                             </td>
-                            <td><div *ngIf="currentItemData.products.length > 1" (click)="removeProduct(index)" class="button delete-button"></div></td>
+                            <td><div *ngIf="editing && currentItemData.products.length > 1" (click)="removeProduct(index)" class="button delete-button"></div></td>
                         </tr>
                     </tbody>
     
                 </table>
                 
-                <div class="button mini-add-button" (click)="addProduct()"></div>
+                <div *ngIf="editing" class="button mini-add-button" (click)="addProduct()"></div>
             </div>
         </div>
 

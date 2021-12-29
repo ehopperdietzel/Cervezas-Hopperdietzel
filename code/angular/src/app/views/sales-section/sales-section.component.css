@@ -48,6 +48,10 @@ table
 {
     margin-left: calc(50% - 14px);
 }
+.sale-form 
+{
+    padding-right:16px;
+}
 .sale-form .in
 {
     width: 256px;
@@ -75,7 +79,7 @@ table
 }
 .products-list th
 {
-    padding-top:10px;
+    padding-top:20px;
 }
 .products-list input,.products-list .select
 {
@@ -92,9 +96,43 @@ table
 }
 .select.priceType
 {
-    width:120px;
+    width:170px;
 }
 input[type="checkbox"]
 {
     margin:12px;
+}
+.sale-form span, .products-list span
+{
+    font-weight: normal;
+    line-height:25px;
+}
+.fieldTitle
+{
+    font-size: 15px;
+    height:40px;
+    padding-right: 18px;
+    color:#444;
+}
+
+.products-list th
+{
+    padding-top: 20px;
+    font-size: 15px;
+    color:#444;
+}
+
+.products-list table
+{
+    border-spacing: 16px;
+    border-collapse: separate;
+}
+.products-list
+{
+    border-left: var(--light-gray) 0.5px solid;
+}
+
+.products-list-editing th
+{
+    padding-top:30px;
 }

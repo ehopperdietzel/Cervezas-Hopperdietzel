@@ -13,7 +13,7 @@ class DeleteSaleRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,5 +26,10 @@ class DeleteSaleRequest extends FormRequest
         return [
             //
         ];
+    }
+
+    public function all($keys = NULL)
+    {
+        return array_merge(parent::all(), $this->route()->parameters());
     }
 }

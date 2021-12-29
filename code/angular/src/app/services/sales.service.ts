@@ -29,4 +29,22 @@ export class SalesService {
     };
     return this.http.post<any>(environment.apiURL + '/sales', formData, options);
   }
+
+  public updateSale(formData : string) : Observable<any>
+  {
+    var options = 
+    {
+      headers:{Authorization: 'Bearer ' + this.session.getToken()}
+    };
+    return this.http.patch<any>(environment.apiURL + '/sales', {changes:formData}, options);
+  }
+
+  public deleteSale(saleId : number) : Observable<any>
+  {
+    var options = 
+    {
+      headers:{Authorization: 'Bearer ' + this.session.getToken()}
+    };
+    return this.http.delete<any>(environment.apiURL + '/sales/'+saleId.toString(), options);
+  }
 }

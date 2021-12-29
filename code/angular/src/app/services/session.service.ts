@@ -91,6 +91,15 @@ export class SessionService
     return this.http.post<any>(environment.apiURL + '/login',{email:email,password:password});
   }
 
+  public getColumnSettings() : Observable<any>
+  {
+    var options = 
+    {
+      headers:{Authorization: 'Bearer ' + this.getToken()}
+    };
+    return this.http.get<any>(environment.apiURL + '/columnsSettings', options);
+  }
+
   public proccessToken(token : any) : void
   {
     if(token !== null)
@@ -107,18 +116,19 @@ export class SessionService
         {
           headers:{Authorization: 'Bearer ' + this.getToken()}
         };
-        this.http.get<any>(environment.apiURL + '/columnsSettings', options).subscribe(
-          res => 
-          {
-            this.columnsSettings = res;
-            console.log(res);
-            this.currentSection = "Ventas";
-          },
-          err => 
-          {
-            this.logout();
-            console.log(err);
-          });
+
+        this.getColumnSettings().subscribe(
+        res => 
+        {
+          this.columnsSettings = res;
+          console.log(res);
+          this.currentSection = "Ventas";
+        },
+        err => 
+        {
+          this.logout();
+          console.log(err);
+        });
       }
     }
   }
@@ -147,6 +157,14 @@ export class SessionService
     return this.token;
   }
 
+  public moneyFormat(x : number) : string 
+  {
+    if(x == undefined)
+      return "$0";
+
+    return "$"+x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
   public logout() : void
   {
     this.token = "";
@@ -167,6 +185,11 @@ export class SessionService
     var min = parseInt(date[2].split(' ')[1].split(':')[1]);
 
     return new Date(year, month, day, hour, min);
+  }
+
+  public phpDateToJavascript(date : string)
+  {
+    return date.replace(' ', 'T');
   }
 
 }

@@ -1,7 +1,8 @@
 <div class="table">
     <div id="header" class="head">
         <div class="th no-select" *ngFor="let column of columns;let index = index" [style.width]="column.width + 'px'" [style.display]="column.visible ? 'block' : 'none'" (contextmenu)="columnRightClick($event,index)">
-            {{column.title}} 
+            <span *ngIf="column.type !='productQuantity'">{{column.title}}</span>
+            <span *ngIf="column.type =='productQuantity'" [style.color]="column.color">{{column.title}}</span>
             <span draggable="true" class="handle" (dragstart)="columnDragStart($event,index)" (drag)="columnDrag($event,index)" (dragend)="columnDragEnd($event,index)"></span>
         </div>
         <div class="th no-select" style="width:2000px"></div>
@@ -21,15 +22,25 @@
                 <b *ngIf="column.type == 'statusText' && row[column.key] == 1" class="text green">Activado</b>
 
                 <!-- Pagado (fecha) -->
-                <b *ngIf="column.type == 'paid' && row.paid == false" class="text red">PENDIENTE</b>
-                <b *ngIf="column.type == 'paid' && row.paid == true" class="text green">{{row.paidDate}}</b>
+                <div *ngIf="column.type == 'paid' && row.paid == false" class="text red">Pendiente</div>
+                <div *ngIf="column.type == 'paid' && row.paid == true" class="text green">{{row.paidDate.split(' ')[0]}}</div>
 
                 <!-- Entregado (fecha) -->
-                <b *ngIf="column.type == 'delivered' && row.delivered == false" class="text red">PENDIENTE</b>
-                <b *ngIf="column.type == 'delivered' && row.delivered == true" class="text green">{{row.deliverDate}}</b>
+                <div *ngIf="column.type == 'delivered' && row.delivered == false" class="text red">Pendiente</div>
+                <div *ngIf="column.type == 'delivered' && row.delivered == true" class="text green">{{row.deliverDate.split(' ')[0]}}</div>
 
                 <!-- Dinero -->
                 <b *ngIf="column.type == 'money'" class="text green">{{moneyFormat(row[column.key])}}</b>
+
+                <!-- Cantidad Producto -->
+                <div style="text-align:center" *ngIf="column.type == 'productQuantity'">{{getProductQuantity(row.products,column.key)}}</div>
+
+                <!-- Tipo de Documento -->
+                <div *ngIf="column.type == 'documentType'">{{documentTypes[row[column.key]].name}}</div>
+
+                <!-- Nº de Documento -->
+                <b *ngIf="column.type == 'document' && row[column.key].documentIsSigned" class="text green">{{row[column.key].documentNumber}}</b>
+                <div *ngIf="column.type == 'document' && !row[column.key].documentIsSigned" class="text red">Pendiente</div>
 
                 <!-- Image -->
                 <div *ngIf="column.type == 'image'" class="image" [style.background-image]="'url(\'assets/img/products/0.jpg\')'"></div>

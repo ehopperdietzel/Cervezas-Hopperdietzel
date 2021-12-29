@@ -1,6 +1,6 @@
 <div class="suggestions-input">
-    <input spellcheck="false" value="{{options.value}}" type="text" placeholder="{{options.placeholder}}" (click)="text.value=''" (keyup)="onKeyUp.emit(text.value)" [ngStyle]="options.styles" #text/>
+    <input spellcheck="false" [value]="options.value" type="text" placeholder="{{options.placeholder}}" (click)="hasFocus = true; valueBackup = options.value; options.value=''" (keyup)="onKeyUp.emit(text.value)" [ngStyle]="options.styles" #text/>
     <div *ngIf="options.suggestions.length > 0" class="suggestions-list">
-        <div *ngFor="let suggestion of options.suggestions;let index = index;" (click)="itemSelected.emit(index)">{{suggestion.value}}</div>
+        <div *ngFor="let suggestion of options.suggestions;let index = index;" (click)="itemSelected.emit(index);valueBackup = options.value;">{{suggestion.value}}</div>
     </div>
 </div>

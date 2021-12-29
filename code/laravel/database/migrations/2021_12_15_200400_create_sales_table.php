@@ -27,7 +27,7 @@ class CreateSalesTable extends Migration
             $table->timestamp('deliverDate', $precision = 0)->useCurrent();
             $table->timestamp('paidDate', $precision = 0)->useCurrent();
 
-            $table->string('comment',256);
+            $table->string('comment',256)->nullable();
 
             $table->timestamp('lastModificationTime', $precision = 0)->useCurrent();
             $table->unsignedBigInteger('lastModificationUser');

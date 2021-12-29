@@ -18,7 +18,7 @@ class CreateBatchesTable extends Migration
             $table->unsignedBigInteger('batchNumber');
             $table->unsignedBigInteger('product');
             $table->unsignedBigInteger('quantity');
-            $table->string('comment',256);
+            $table->string('comment',256)->nullable();
             $table->timestamp('beginDate', $precision = 0)->useCurrent();
             $table->timestamp('endDate', $precision = 0)->useCurrent();
             $table->timestamp('lastModificationTime', $precision = 0)->useCurrent();

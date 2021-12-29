@@ -20,6 +20,15 @@ export class ProductsService {
     return this.http.post<any>(environment.apiURL + '/products', formData, options);
   }
 
+  public updateProduct(formData : any) : Observable<any>
+  {
+    var options = 
+    {
+      headers:{Authorization: 'Bearer ' + this.session.getToken()}
+    };
+    return this.http.post<any>(environment.apiURL + '/updateProduct', formData, options);
+  }
+
   public getProducts() : Observable<any>
   {
     var options = 

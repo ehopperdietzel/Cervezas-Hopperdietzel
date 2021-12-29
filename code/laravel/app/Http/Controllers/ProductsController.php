@@ -7,6 +7,7 @@ use App\Http\Middleware\JWT;
 use App\Http\Requests\CreateProductRequest;
 use App\Http\Requests\GetProductsRequest;
 use App\Http\Requests\DeleteProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Products;
 
 class ProductsController extends Controller
@@ -18,8 +19,14 @@ class ProductsController extends Controller
 
     public function createProduct(CreateProductRequest $request)
     {
-        $productId = Products::createProduct($request);
-        return response()->json(['id' => $productId],200);
+        $id = Products::createProduct($request);
+        return response()->json(['id' => $id],200);
+    }
+
+    public function updateProduct(UpdateProductRequest $request)
+    {
+        Products::updateProduct($request);
+        return response()->json(['status' => "success"],200);
     }
 
     public function getProducts(GetProductsRequest $request)

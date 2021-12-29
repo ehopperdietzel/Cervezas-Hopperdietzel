@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('color',7);
             $table->integer('stock')->default(0);
             $table->boolean('image')->default(false);
+            $table->boolean('enabled')->default(true);
             $table->unsignedBigInteger('defaultPrice')->nullable();
             $table->timestamp('lastModificationTime', $precision = 0);
             $table->unsignedBigInteger('lastModificationUser');
